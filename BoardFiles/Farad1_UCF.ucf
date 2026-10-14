@@ -1,0 +1,81 @@
+NET	"Clock" 						LOC = p85;
+
+NET	"Push_Button"				LOC = p87;
+
+NET	"LED[0]" 					LOC = p105;
+NET	"LED[1]" 					LOC = p104;
+NET	"LED[2]" 					LOC = p102;
+NET	"LED[3]" 					LOC = p101;
+
+NET	"Seven_Segment[0]"		LOC = p100;		# a segment
+NET	"Seven_Segment[1]"		LOC = p99;		# b segment
+NET	"Seven_Segment[2]"		LOC = p98;		# c segment
+NET	"Seven_Segment[3]"		LOC = p97;		# d segment
+NET	"Seven_Segment[4]"		LOC = p95;		# e segment
+NET	"Seven_Segment[5]"		LOC = p94;		# f segment
+NET	"Seven_Segment[6]"		LOC = p93;		# g segment
+NET	"Seven_Segment[7]"		LOC = p92;		# p segment
+
+NET	"DIP_Switch[0]"			LOC = p84;
+NET	"DIP_Switch[1]"			LOC = p81;
+NET	"DIP_Switch[2]"			LOC = p79;
+NET	"DIP_Switch[3]"			LOC = p74;
+
+NET	"Temperature_Data"		LOC = p35;
+
+NET	"Serial_Tx"					LOC = p41;
+NET	"Serial_Rx"					LOC = p40;
+
+NET	"Ext_Clock"					LOC = p88;
+
+NET	"SRAM_Data[0]"				LOC = p142;
+NET	"SRAM_Data[1]"				LOC = p141;
+NET	"SRAM_Data[2]"				LOC = p140;
+NET	"SRAM_Data[3]"				LOC = p139;
+NET	"SRAM_Data[4]"				LOC = p112;
+NET	"SRAM_Data[5]"				LOC = p111;
+NET	"SRAM_Data[6]"				LOC = p119;
+NET	"SRAM_Data[7]"				LOC = p120;
+NET	"SRAM_Address[0]"			LOC = p6;
+NET	"SRAM_Address[1]"			LOC = p5;
+NET	"SRAM_Address[2]"			LOC = p2;
+NET	"SRAM_Address[3]"			LOC = p1;
+NET	"SRAM_Address[4]"			LOC = p144;
+NET	"SRAM_Address[5]"			LOC = p137;
+NET	"SRAM_Address[6]"			LOC = p134;
+NET	"SRAM_Address[7]"			LOC = p133;
+NET	"SRAM_Address[8]"			LOC = p132;
+NET	"SRAM_Address[9]"			LOC = p131;
+NET	"SRAM_Address[10]"		LOC = p118;
+NET	"SRAM_Address[11]"		LOC = p117;
+NET	"SRAM_Address[12]"		LOC = p116;
+NET	"SRAM_Address[13]"		LOC = p115;
+NET	"SRAM_Address[14]"		LOC = p114;
+NET	"SRAM_Address[15]"		LOC = p123;
+NET	"SRAM_Address[16]"		LOC = p124;
+NET	"SRAM_Address[17]"		LOC = p126;
+NET	"SRAM_Address[18]"		LOC = p127;
+NET	"SRAM_WE"					LOC = p138;
+NET	"SRAM_CE"					LOC = p143;
+NET	"SRAM_OE"					LOC = p121;
+
+NET	"Extention_Header[0]"	LOC = p34; 		#1
+NET	"Extention_Header[1]"	LOC = p32;		#3
+NET	"Extention_Header[2]"	LOC = p30;		#5	
+NET	"Extention_Header[3]"	LOC = p29;		#7	
+NET	"Extention_Header[4]"	LOC = p27;		#9
+NET	"Extention_Header[5]"	LOC = p26;		#11
+NET	"Extention_Header[6]"	LOC = p24;		#13
+NET	"Extention_Header[7]"	LOC = p23;		#15
+NET	"Extention_Header[8]"	LOC = p22;		#17
+NET	"Extention_Header[9]"	LOC = p21;		#19
+NET	"Extention_Header[10]"	LOC = p17;		#21
+NET	"Extention_Header[11]"	LOC = p16;		#23
+NET	"Extention_Header[12]"	LOC = p15;		#25
+NET	"Extention_Header[13]"	LOC = p14;		#27
+NET	"Extention_Header[14]"	LOC = p12;		#29
+NET	"Extention_Header[15]"	LOC = p11;		#31
+NET	"Extention_Header[16]"	LOC = p10;		#33
+NET	"Extention_Header[17]"	LOC = p9;		#35
+NET	"Extention_Header[18]"	LOC = p8;		#37
+NET	"Extention_Header[19]"	LOC = p7;		#39
