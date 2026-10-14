@@ -1,0 +1,3292 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.12.1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="S8 Project" />
+  <title>S8 Soft Processor for Spartan-6 LX9</title>
+  <style>
+
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+  <style type="text/css">
+@page { size: A4; margin: 18mm 16mm; }
+html { font-size: 10.5pt; }
+body {
+font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+line-height: 1.45;
+color: #1a1a1a;
+max-width: none;
+margin: 0;
+}
+h1 { font-size: 16pt; margin-top: 1.4em; border-bottom: 2px solid #333; padding-bottom: 3px; page-break-after: avoid; }
+h2 { font-size: 13pt; margin-top: 1.2em; border-bottom: 1px solid #bbb; padding-bottom: 2px; page-break-after: avoid; }
+h3 { font-size: 11.5pt; margin-top: 1em; page-break-after: avoid; }
+table { border-collapse: collapse; width: 100%; margin: 0.8em 0; font-size: 9.2pt; page-break-inside: auto; }
+th, td { border: 1px solid #999; padding: 4px 6px; text-align: left; vertical-align: top; }
+th { background: #eef1f4; }
+tr { page-break-inside: avoid; }
+code { font-family: "Cascadia Mono", "Consolas", monospace; font-size: 9.2pt; background: #f4f5f7; padding: 0 2px; border-radius: 2px; }
+pre { background: #f4f5f7; border-left: 3px solid #888; padding: 8px 10px; overflow: hidden; font-size: 8.8pt; line-height: 1.3; page-break-inside: avoid; }
+pre code { background: none; padding: 0; }
+blockquote { border-left: 3px solid #ccc; margin-left: 0; padding-left: 1em; color: #444; }
+.title { text-align: center; font-size: 24pt; margin-top: 22%; }
+.subtitle { text-align: center; font-size: 14pt; color: #333; }
+.author { text-align: center; font-size: 11pt; margin-top: 2em; }
+.date { text-align: center; font-size: 11pt; }
+nav#TOC { page-break-after: always; font-size: 10pt; }
+nav#TOC ul { list-style: none; padding-left: 1.2em; }
+nav#TOC > ul { padding-left: 0; }
+hr { border: none; border-top: 1px solid #ccc; margin: 1.5em 0; }
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">S8 Soft Processor for Spartan-6 LX9</h1>
+<p class="subtitle">Complete Technical Specification and Implementation
+Plan (v1.1 — Farad-1 board verified)</p>
+<p class="author">S8 Project</p>
+<p class="date">October 2026</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#document-control" id="toc-document-control">Document
+Control</a>
+<ul>
+<li><a href="#how-to-read-this-document" id="toc-how-to-read-this-document">How to read this document</a></li>
+<li><a href="#invariants-never-violate-these" id="toc-invariants-never-violate-these">Invariants (never violate
+these)</a></li>
+<li><a href="#change-log-versus-the-original-manual" id="toc-change-log-versus-the-original-manual">Change log versus the
+original manual</a></li>
+</ul></li>
+<li><a href="#introduction-and-scope" id="toc-introduction-and-scope">1.
+Introduction and scope</a>
+<ul>
+<li><a href="#what-s8-is" id="toc-what-s8-is">1.1 What S8 is</a></li>
+<li><a href="#what-this-document-guarantees-and-what-it-does-not" id="toc-what-this-document-guarantees-and-what-it-does-not">1.2 What
+this document guarantees, and what it does not</a></li>
+<li><a href="#non-goals-v1" id="toc-non-goals-v1">1.3 Non-goals
+(v1)</a></li>
+</ul></li>
+<li><a href="#system-architecture" id="toc-system-architecture">2.
+System architecture</a></li>
+<li><a href="#project-directory-structure" id="toc-project-directory-structure">3. Project directory
+structure</a></li>
+<li><a href="#top-level-block-diagram-textual" id="toc-top-level-block-diagram-textual">4. Top-level block diagram
+(textual)</a></li>
+<li><a href="#board-fact-sheet-farad-1-verified-in-v1.1" id="toc-board-fact-sheet-farad-1-verified-in-v1.1">5. Board fact sheet —
+Farad-1 (VERIFIED in v1.1)</a>
+<ul>
+<li><a href="#verified-facts-formerly-open-items-b1b9" id="toc-verified-facts-formerly-open-items-b1b9">5.1 Verified facts
+(formerly open items B1–B9)</a></li>
+<li><a href="#farad-1-pin-table-s8-relevant" id="toc-farad-1-pin-table-s8-relevant">5.2 Farad-1 pin table
+(S8-relevant)</a></li>
+<li><a href="#remaining-hardware-checks-bring-up-time-not-design-unknowns" id="toc-remaining-hardware-checks-bring-up-time-not-design-unknowns">5.3
+Remaining hardware checks (bring-up time; not design unknowns)</a></li>
+<li><a href="#spartan-6-lx9-resource-budget-xc6slx9-2tqg144c-ds160-family-table" id="toc-spartan-6-lx9-resource-budget-xc6slx9-2tqg144c-ds160-family-table">5.4
+Spartan-6 LX9 resource budget (XC6SLX9-2TQG144C, DS160 family
+table)</a></li>
+</ul></li>
+<li><a href="#instruction-set-architecture-v1-frozen" id="toc-instruction-set-architecture-v1-frozen">6. Instruction set
+architecture v1 (FROZEN)</a>
+<ul>
+<li><a href="#programmers-model" id="toc-programmers-model">6.1
+Programmer’s model</a></li>
+<li><a href="#instruction-formats" id="toc-instruction-formats">6.2
+Instruction formats</a></li>
+<li><a href="#opcode-map" id="toc-opcode-map">6.3 Opcode map</a></li>
+<li><a href="#instruction-reference" id="toc-instruction-reference">6.4
+Instruction reference</a></li>
+<li><a href="#flag-formulas-normative" id="toc-flag-formulas-normative">6.5 Flag formulas (normative)</a></li>
+<li><a href="#halt-trap-and-stack-faults" id="toc-halt-trap-and-stack-faults">6.6 HALT, TRAP, and stack
+faults</a></li>
+<li><a href="#golden-encoding-vectors" id="toc-golden-encoding-vectors">6.7 Golden encoding vectors</a></li>
+<li><a href="#assembler-syntax" id="toc-assembler-syntax">6.8 Assembler
+syntax</a></li>
+<li><a href="#worked-programs-normative-listings" id="toc-worked-programs-normative-listings">6.9 Worked programs
+(normative listings)</a></li>
+</ul></li>
+<li><a href="#memory-architecture" id="toc-memory-architecture">7.
+Memory architecture</a>
+<ul>
+<li><a href="#program-memory" id="toc-program-memory">7.1 Program
+memory</a></li>
+<li><a href="#data-memory" id="toc-data-memory">7.2 Data memory</a></li>
+<li><a href="#mmio-register-map-ports-07-at-addresses-0xf00xf7" id="toc-mmio-register-map-ports-07-at-addresses-0xf00xf7">7.3 MMIO
+register map (ports 0–7 at addresses 0xF0–0xF7)</a></li>
+</ul></li>
+<li><a href="#cpu-microarchitecture" id="toc-cpu-microarchitecture">8.
+CPU microarchitecture</a>
+<ul>
+<li><a href="#datapath" id="toc-datapath">8.1 Datapath</a></li>
+<li><a href="#control-fsm-multicycle-one-instruction-per-state-sequence" id="toc-control-fsm-multicycle-one-instruction-per-state-sequence">8.2
+Control FSM (multicycle, one instruction per state sequence)</a></li>
+<li><a href="#bus-interface-and-wait-states" id="toc-bus-interface-and-wait-states">8.3 Bus interface and wait
+states</a></li>
+<li><a href="#clock-and-reset" id="toc-clock-and-reset">8.4 Clock and
+reset</a></li>
+</ul></li>
+<li><a href="#rtl-module-specifications" id="toc-rtl-module-specifications">9. RTL module specifications</a></li>
+<li><a href="#uart-subsystem" id="toc-uart-subsystem">10. UART
+subsystem</a>
+<ul>
+<li><a href="#baud-generation" id="toc-baud-generation">10.1 Baud
+generation</a></li>
+<li><a href="#framing" id="toc-framing">10.2 Framing</a></li>
+<li><a href="#fifos-and-errors" id="toc-fifos-and-errors">10.3 FIFOs and
+errors</a></li>
+</ul></li>
+<li><a href="#mode-selection-and-boot-sequence" id="toc-mode-selection-and-boot-sequence">11. Mode selection and boot
+sequence</a>
+<ul>
+<li><a href="#mode-pin-semantics" id="toc-mode-pin-semantics">11.1 MODE
+pin semantics</a></li>
+<li><a href="#boot-flow" id="toc-boot-flow">11.2 Boot flow</a></li>
+<li><a href="#copy-details" id="toc-copy-details">11.3 Copy
+details</a></li>
+</ul></li>
+<li><a href="#packet-protocol-v1-byte-exact" id="toc-packet-protocol-v1-byte-exact">12. Packet protocol v1
+(byte-exact)</a>
+<ul>
+<li><a href="#frame-layout" id="toc-frame-layout">12.1 Frame
+layout</a></li>
+<li><a href="#crc16" id="toc-crc16">12.2 CRC16</a></li>
+<li><a href="#commands" id="toc-commands">12.3 Commands</a></li>
+<li><a href="#responses" id="toc-responses">12.4 Responses</a></li>
+<li><a href="#sequencing-duplicates-timeouts" id="toc-sequencing-duplicates-timeouts">12.5 Sequencing, duplicates,
+timeouts</a></li>
+</ul></li>
+<li><a href="#w25q64-spi-flash-subsystem" id="toc-w25q64-spi-flash-subsystem">13. W25Q64 SPI flash subsystem</a>
+<ul>
+<li><a href="#commands-used" id="toc-commands-used">13.1 Commands
+used</a></li>
+<li><a href="#byte-engine-vs-command-controller" id="toc-byte-engine-vs-command-controller">13.2 Byte engine vs command
+controller</a></li>
+<li><a href="#controller-fsm" id="toc-controller-fsm">13.3 Controller
+FSM</a></li>
+<li><a href="#storage-layout-farad-1-shared-configuration-flash-relocated-base" id="toc-storage-layout-farad-1-shared-configuration-flash-relocated-base">13.4
+Storage layout (Farad-1: SHARED configuration flash — relocated
+base)</a></li>
+<li><a href="#metadata-record-32-bytes-at-offset-0-of-a-metadata-sector" id="toc-metadata-record-32-bytes-at-offset-0-of-a-metadata-sector">13.5
+Metadata record (32 bytes, at offset 0 of a metadata sector)</a></li>
+<li><a href="#atomic-update-procedure-device-side-on-commit" id="toc-atomic-update-procedure-device-side-on-commit">13.6 Atomic
+update procedure (device side, on COMMIT)</a></li>
+<li><a href="#boot-time-validation-recap-of-the-algorithm" id="toc-boot-time-validation-recap-of-the-algorithm">13.7 Boot-time
+validation (recap of the algorithm)</a></li>
+</ul></li>
+<li><a href="#rust-host-toolchain" id="toc-rust-host-toolchain">14. Rust
+host toolchain</a>
+<ul>
+<li><a href="#workspace" id="toc-workspace">14.1 Workspace</a></li>
+<li><a href="#s8-isa" id="toc-s8-isa">14.2 <code>s8-isa</code></a></li>
+<li><a href="#s8-assembler" id="toc-s8-assembler">14.3
+<code>s8-assembler</code></a></li>
+<li><a href="#s8-image" id="toc-s8-image">14.4
+<code>s8-image</code></a></li>
+<li><a href="#s8-serial" id="toc-s8-serial">14.5
+<code>s8-serial</code></a></li>
+<li><a href="#s8-disasm" id="toc-s8-disasm">14.6
+<code>s8-disasm</code></a></li>
+<li><a href="#s8-cli" id="toc-s8-cli">14.7 <code>s8-cli</code></a></li>
+</ul></li>
+<li><a href="#xilinx-ise-workflow" id="toc-xilinx-ise-workflow">15.
+Xilinx ISE workflow</a></li>
+<li><a href="#verification-plan" id="toc-verification-plan">16.
+Verification plan</a>
+<ul>
+<li><a href="#rtl-testbenches" id="toc-rtl-testbenches">16.1 RTL
+testbenches</a></li>
+<li><a href="#behavioral-w25q64-model-tb_w25q64_model.v" id="toc-behavioral-w25q64-model-tb_w25q64_model.v">16.2 Behavioral
+W25Q64 model (<code>tb_w25q64_model.v</code>)</a></li>
+<li><a href="#host-side-tests" id="toc-host-side-tests">16.3 Host-side
+tests</a></li>
+<li><a href="#hardware-acceptance-tests-per-phase" id="toc-hardware-acceptance-tests-per-phase">16.4 Hardware acceptance
+tests (per phase)</a></li>
+<li><a href="#budgets-and-traceability" id="toc-budgets-and-traceability">16.5 Budgets and traceability</a></li>
+</ul></li>
+<li><a href="#safety-reliability-and-failure-handling" id="toc-safety-reliability-and-failure-handling">17. Safety,
+reliability, and failure handling</a></li>
+<li><a href="#phased-execution-plan" id="toc-phased-execution-plan">18.
+Phased execution plan</a></li>
+<li><a href="#future-work-specified-not-scheduled" id="toc-future-work-specified-not-scheduled">19. Future work (specified,
+not scheduled)</a>
+<ul>
+<li><a href="#compiler-phase-7" id="toc-compiler-phase-7">19.1 Compiler
+(Phase 7)</a></li>
+<li><a href="#instruction-fetch-from-external-flash" id="toc-instruction-fetch-from-external-flash">19.2 Instruction-fetch
+from external flash</a></li>
+<li><a href="#abi-proposal-freeze-when-the-compiler-starts" id="toc-abi-proposal-freeze-when-the-compiler-starts">19.3 ABI proposal
+(freeze when the compiler starts)</a></li>
+</ul></li>
+<li><a href="#references" id="toc-references">20. References</a></li>
+<li><a href="#appendix-a-guide-for-an-implementing-agent" id="toc-appendix-a-guide-for-an-implementing-agent">Appendix A — Guide
+for an implementing agent</a></li>
+</ul>
+</nav>
+<h1 id="document-control">Document Control</h1>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Title</td>
+<td>S8 Soft Processor for Spartan-6 LX9 — Complete Technical
+Specification and Implementation Plan</td>
+</tr>
+<tr>
+<td>Version</td>
+<td>1.1 (supersedes v1.0 and the original <em>S8 Technical
+Implementation Manual</em>)</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Implementation-ready specification. Design intent is frozen unless a
+change control entry says otherwise.</td>
+</tr>
+<tr>
+<td>Target FPGA</td>
+<td>XC6SLX9-2TQG144C on the <strong>Farad-1</strong> board — verified
+(schematic renders + user manual + vendor UCF)</td>
+</tr>
+<tr>
+<td>Target flash</td>
+<td>W25Q64BV 64-Mbit SPI NOR — <strong>shared FPGA configuration
+flash</strong> (verified; S8 storage relocated, Section 13.4)</td>
+</tr>
+<tr>
+<td>HDL</td>
+<td>Verilog-2001, Xilinx ISE 14.7 flow</td>
+</tr>
+<tr>
+<td>Host tools</td>
+<td>Rust (stable), Cargo workspace</td>
+</tr>
+<tr>
+<td>Audience</td>
+<td>Any engineer or coding agent implementing the RTL, the host
+toolchain, or the verification environment from scratch</td>
+</tr>
+</tbody>
+</table>
+<h2 id="how-to-read-this-document">How to read this document</h2>
+<p>This specification is written so that an implementer with no prior
+context can build the complete S8 system — RTL, host toolchain, and
+verification — without consulting the original manual. The original
+manual is retained as background reading only; <strong>where the two
+documents disagree, this specification wins</strong>.</p>
+<p>Reading order for a new implementer: Section 1 (scope) → Section 6
+(ISA v1, frozen) → Section 7 (memory map) → Section 8 (CPU
+microarchitecture) → Section 9 (RTL modules) → Sections 10–13
+(peripherals and boot) → Section 14 (Rust toolchain) → Section 16
+(verification) → Section 18 (phase plan).</p>
+<h2 id="invariants-never-violate-these">Invariants (never violate
+these)</h2>
+<ol type="1">
+<li><strong>The <code>s8-isa</code> Rust crate and the encoding tables
+in Section 6 are the single source of truth for instruction
+encodings.</strong> RTL localparams and assembler opcodes must both
+trace to those tables. If they ever disagree, one of them is wrong — fix
+it against Section 6, do not “average” the two.</li>
+<li><strong>Every golden vector in Section 6.7 must be a regression test
+in both the Rust workspace and the RTL testbenches.</strong> The three
+starter-continuity words (<code>0x1001</code>, <code>0x5000</code>,
+<code>0x4002</code>) must pass in every environment.</li>
+<li><strong>Never guess board facts.</strong> The Farad-1 fact sheet
+(Section 5) is verified against the schematic renders and is the only
+source of board truth; anything not listed there stays TODO until
+verified physically. The three remaining hardware-confirmation checks
+are listed in Section 5.3.</li>
+<li><strong>All lengths, addresses, loop counts, and waits are
+bounded.</strong> Every FSM has a timeout; every host loop has a retry
+cap; every image is range-checked before use.</li>
+<li><strong>Never erase or program the sector holding the FPGA
+configuration image</strong> if the flash turns out to be shared
+(Section 13.4).</li>
+<li><strong>The active application slot is never erased while a
+replacement has not been fully committed.</strong> Commit order: erase →
+program payload → read back → program metadata marker last.</li>
+<li><strong>CRC16 is integrity checking, not security.</strong> If
+adversarial uploads ever matter, add authentication; do not pretend CRC
+is a signature.</li>
+</ol>
+<h2 id="change-log-versus-the-original-manual">Change log versus the
+original manual</h2>
+<p>The original manual was a sound plan with several internal
+inconsistencies. This version resolves all of them; the identifiers
+(P1–P6) refer to the analysis that found them.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>ID</th>
+<th>Problem in original manual</th>
+<th>Resolution in this document</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P1</td>
+<td>MMIO registers at 0xF0–0xF6 fell <em>inside</em> the proposed 1 KiB
+data RAM (0x000–0x3FF); the “decode outside RAM” rule was
+unsatisfiable.</td>
+<td>Data address space is exactly 8 bits (256 B). RAM = 0x00–0xEF, MMIO
+= 0xF0–0xFF. Single decode rule:
+<code>addr[7] &amp; addr[6] &amp; addr[5]</code> (addr ≥ 0xF0) selects
+MMIO. The published 0xF0–0xF6 register map is preserved.</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>16 KiB flash slots could never boot: program RAM is 8 KiB (4096 ×
+16-bit).</td>
+<td>Slots are 8 KiB, exactly matching program RAM capacity. The
+assembler and the image packer both enforce the 8192-byte limit.</td>
+</tr>
+<tr>
+<td>P3</td>
+<td>ISA v0 had no <code>IN</code>, no conditional branch, no
+<code>ANDI</code>, no peripheral-select field, and LDI could load only
+0–63 — the manual’s own UART-echo example could not be assembled.</td>
+<td>ISA v1 (Section 6) is frozen with <code>IN</code>, seven conditional
+branches, 8-bit LDI immediate, ALU-immediate group, peripheral port
+fields in <code>IN</code>/<code>OUT</code>, stack ops, and shifts. Every
+example program in this document assembles with v1 encodings, and the
+three useful starter vectors are preserved bit-for-bit.</td>
+</tr>
+<tr>
+<td>P4</td>
+<td>CRC16 parameters and the ACK frame were unspecified.</td>
+<td>CRC16-CCITT-FALSE is fully pinned (poly 0x1021, init 0xFFFF, no
+reflection, no final XOR, MSB-first) with the canonical check value
+0x29B1 for ASCII “123456789”. The ACK frame layout and all eight status
+codes are byte-exact (Section 12).</td>
+</tr>
+<tr>
+<td>P5</td>
+<td>The bootloader’s <code>RUN</code> command conflicted with the
+latched MODE semantics.</td>
+<td><code>RUN</code> performs a warm hand-off: CPU reset is released,
+the bootloader FSM parks in a terminal RUN state, and re-entering
+programming mode requires a hard reset with MODE=1 (Section 11.1).</td>
+</tr>
+<tr>
+<td>P6</td>
+<td>GPIO width unstated; ISE 14.7 practicalities missing; several tables
+misaligned.</td>
+<td>GPIO is exactly 4 bits, stated everywhere. Section 15 documents the
+ISE 14.7 environment (32-bit installer, VM guidance). All tables in this
+document were proofed in rendered form.</td>
+</tr>
+<tr>
+<td>—</td>
+<td>Metadata records for atomic update were both proposed in one 4 KiB
+sector, so erasing to update one record destroyed the other’s
+redundancy.</td>
+<td>Two metadata records live in two separate 4 KiB sectors; a commit
+erases only the inactive record’s sector (Section 13.5).</td>
+</tr>
+<tr>
+<td>B-facts</td>
+<td>v1.0 left all board facts (B1–B9) open and assumed a logic-level
+USB-UART bridge and a 25 MHz default clock.</td>
+<td>v1.1 verifies every fact against the Farad-1 schematic (page renders
+inspected visually): 50 MHz clock (p85), active-low debounced reset
+button (p87), MODE = DIP0 (p84, inverted), host link = FT2232H Channel B
+UART (p83/p82, one-time FT_PROG) with DB9/MAX232 fallback (p41/p40), and
+the W25Q64BV confirmed as the <strong>shared configuration
+flash</strong> — storage layout relocated to base 0x060000 (Section
+13.4) and the full flash pin map pinned in the populated UCF (Section
+15), including the no-pull-up WP#/HOLD# hazard (p62/p61 must be driven
+high).</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="introduction-and-scope">1. Introduction and scope</h1>
+<h2 id="what-s8-is">1.1 What S8 is</h2>
+<p>S8 is a small, custom 8-bit soft processor for learning and
+experimentation on a Spartan-6 LX9 FPGA. The FPGA holds the CPU,
+instruction and data storage, GPIO, UART, SPI flash controller, and boot
+control. A PC-side Rust toolchain assembles source code into an image
+and transfers it to the board over USB-UART. A W25Q64-family SPI NOR
+flash stores application images persistently so that new programs can be
+installed without rebuilding or re-transmitting the FPGA bitstream.</p>
+<h2 id="what-this-document-guarantees-and-what-it-does-not">1.2 What
+this document guarantees, and what it does not</h2>
+<p>This document specifies the complete system at implementation level:
+encodings, memory maps, packet bytes, metadata records, module
+interfaces, FSM state lists, test inventories, and phase gates.
+Implementing it produces a working system without further design
+decisions, except the board facts listed in Section 5.</p>
+<p>This document does <strong>not</strong> claim the system currently
+exists. As of v1.0, nothing beyond a Phase-0 learning skeleton (demo CPU
+with a hard-coded program, placeholder pins, a divided demo clock) has
+ever been synthesized. Sections 10–14 specify things that must be built
+and verified.</p>
+<h2 id="non-goals-v1">1.3 Non-goals (v1)</h2>
+<ul>
+<li>No interrupts. All peripheral interaction is polling through status
+bits.</li>
+<li>No external memory bus. Program storage is internal BRAM only.</li>
+<li>No multiply/divide instructions, no barrel-shift-by-immediate
+encoding (shifts are by register value).</li>
+<li>No caches, no pipelines (the CPU is a multicycle FSM).</li>
+<li>No cryptographic authentication of uploads.</li>
+<li>No C-like compiler until Phase 7; the v1 toolchain is
+assembler-level only.</li>
+</ul>
+<hr />
+<h1 id="system-architecture">2. System architecture</h1>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Responsibilities</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PC / host</td>
+<td>Rust CLI: assembler, image packer, serial uploader, disassembler,
+serial monitor</td>
+</tr>
+<tr>
+<td>Host link</td>
+<td>FT2232H: Channel A = USB JTAG (iMPACT); Channel B = USB-UART to S8
+(p83/p82, after one-time FT_PROG); fallback DB9 RS-232 via MAX232
+(p41/p40)</td>
+</tr>
+<tr>
+<td>FPGA top</td>
+<td>Clock/reset conditioning, synchronized MODE, CPU, memories, UART,
+GPIO, SPI, boot control</td>
+</tr>
+<tr>
+<td>S8 CPU</td>
+<td>Fetch → decode → execute; 8 × 8-bit registers; ALU; flags; 12-bit
+PC; 8-bit stack pointer</td>
+</tr>
+<tr>
+<td>Peripherals</td>
+<td>UART RX/TX with FIFOs, GPIO ports, SPI byte engine, W25Q64 command
+controller</td>
+</tr>
+<tr>
+<td>W25Q64</td>
+<td>Nonvolatile metadata records, application slots A/B, image CRC</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Clocking policy.</strong> One primary clock domain for the
+entire design (<code>clk</code> = board oscillator). Baud generation,
+CPU slowdowns (if ever needed), and all timing use <strong>clock-enable
+pulses</strong>, never fabric-generated derived clocks. If a future
+requirement forces a second clock domain, explicit two-flop
+synchronizers and timing constraints are mandatory; no such requirement
+exists in v1.</p>
+<p><strong>Reset policy.</strong> One external active-low reset input
+<code>rst_n</code>, asserted asynchronously, deasserted synchronously
+through a two-flop reset synchronizer. Every sequential element uses the
+synchronized reset.</p>
+<hr />
+<h1 id="project-directory-structure">3. Project directory structure</h1>
+<pre><code>s8-project/
+  README.md
+  docs/
+    isa-v1.md                 # frozen copy of Section 6 (single source of truth)
+    boot-protocol.md          # frozen copy of Section 12
+    flash-layout.md           # frozen copy of Section 13.4-13.5
+    board-bringup.md          # verified board facts as they are discovered
+    verification-plan.md      # frozen copy of Section 16
+  rtl/
+    s8_top.v
+    s8_cpu.v
+    s8_alu.v
+    s8_regfile.v
+    s8_program_ram.v
+    s8_data_ram.v
+    s8_bus.v
+    s8_gpio.v
+    uart_rx.v
+    uart_tx.v
+    uart_regs.v
+    spi_byte_engine.v
+    w25q64_controller.v
+    s8_boot_ctrl.v            # MODE handling + bootloader FSM + packet parser
+    baud_gen.v
+  tb/
+    tb_s8_alu.v
+    tb_s8_regfile.v
+    tb_s8_cpu_programs.v
+    tb_uart_loopback.v
+    tb_spi_byte_engine.v
+    tb_w25q64_model.v         # behavioral flash model used by other testbenches
+    tb_boot_packets.v
+    tb_full_boot.v
+    vectors/                  # golden vectors exported from s8-isa (generated)
+  constraints/
+    board.ucf                 # populated only from verified schematic facts
+  host/
+    s8/                       # Rust workspace
+      Cargo.toml
+      crates/
+        s8-isa/
+        s8-assembler/
+        s8-image/
+        s8-serial/
+        s8-disasm/
+        s8-cli/
+  examples/
+    gpio.s8
+    uart_echo.s8
+    stack_demo.s8
+    flash_info.s8
+  tools/
+    gen_isa_vectors.js        # emits golden vectors for both RTL and Rust tests
+  build/                      # generated artifacts; bitstreams not committed by default</code></pre>
+<hr />
+<h1 id="top-level-block-diagram-textual">4. Top-level block diagram
+(textual)</h1>
+<pre><code>                 +-------------------------------------------------------------+
+   rst_n ------&gt;| s8_top                                                      |
+   clk   ------&gt;|                                                             |
+   mode  ------&gt;|  [sync]---&gt; boot_ctrl &lt;----&gt; uart_regs &lt;----&gt; uart_rx/tx &lt;--|--&gt; uart_rxd / uart_txd
+   gpio[3:0] &lt;-&gt;|    ^            |                ^                          |
+                 |    |            v                |                          |
+                 |  s8_cpu &lt;--&gt; s8_bus --&gt; data_ram |                          |
+                 |    |              |              |                          |
+                 |    v              +--&gt; gpio      |                          |
+                 | program_ram                          |                          |
+                 |    ^                                 |                          |
+                 |    | (loader port)                  v                          |
+                 |    +-------- w25q64_controller &lt;--&gt; spi_byte_engine --&gt;| cs_n, sck, mosi, miso
+                 +-------------------------------------------------------------+</code></pre>
+<p>Ownership rule: while MODE is latched as programming mode, the CPU is
+held in reset and the boot controller is the only master of program RAM,
+the SPI controller, and the UART data path. While running an
+application, the CPU owns program RAM, data RAM, and the
+UART/GPIO/SPI-register-visible peripherals; the flash controller is idle
+unless the application drives it through a future extension (not in v1:
+SPI registers are not CPU-visible in v1; flash access belongs to the
+boot controller only).</p>
+<hr />
+<h1 id="board-fact-sheet-farad-1-verified-in-v1.1">5. Board fact sheet —
+Farad-1 (VERIFIED in v1.1)</h1>
+<p>Target board: <strong>Farad-1</strong> (Farad Andish, schematic rev
+2016-12-29). In-repo evidence:
+<code>BoardFiles/Farad-1-Schematic.pdf</code> (6 sheets),
+<code>BoardFiles/Farad-1-User-Manual.pdf</code>,
+<code>BoardFiles/Farad1_UCF.ucf</code>. Every fact below was verified by
+inspecting <strong>page renders of the schematic</strong> (not text
+dumps — net-label/pin associations were confirmed visually),
+cross-checked against the vendor UCF and manual. This table is the
+single source of board truth for S8.</p>
+<h2 id="verified-facts-formerly-open-items-b1b9">5.1 Verified facts
+(formerly open items B1–B9)</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>#</th>
+<th>Fact</th>
+<th>Verified value</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>B1</td>
+<td>FPGA part</td>
+<td><strong>XC6SLX9-2TQG144C</strong> → ISE part string
+<code>xc6slx9-2tqg144</code> (speed grade −2, TQG144, commercial)</td>
+<td>Schematic title blocks (all 6 sheets); user manual</td>
+</tr>
+<tr>
+<td>B2</td>
+<td>System clock</td>
+<td><strong>50.000 MHz</strong> oscillator (Y2) → <strong>p85</strong>
+(net OSC, bank 1). PERIOD = 20.000 ns. External SMA clock on p88 exists
+but is unused.</td>
+<td>Peripherals sheet (Y2); sheet 2 U1B; vendor UCF
+<code>Clock = p85</code></td>
+</tr>
+<tr>
+<td>B3</td>
+<td>Reset</td>
+<td>Button <strong>S2 → nFP_RST, p87</strong>, <strong>active
+low</strong>, 4.7 K pull-up (R22) + 4.7 µF (C46) — hardware-debounced.
+Maps directly to <code>rst_n</code>. S1 is PROGRAM_B; do not use it as a
+user reset.</td>
+<td>Peripherals sheet; sheet 2 U1B (p87)</td>
+</tr>
+<tr>
+<td>B4</td>
+<td>Host link</td>
+<td><strong>No logic-level USB-UART bridge exists.</strong> Two safe
+paths: <strong>(a) FT2232H Channel B as UART</strong> — BDBUS0 (TXD from
+FTDI) → net FT_D0 → <strong>p83</strong> (FPGA in); BDBUS1 (RXD to FTDI)
+← net FT_D1 ← <strong>p82</strong> (FPGA out); 3.3 V CMOS; requires a
+one-time FT_PROG EEPROM change (Channel B = UART, no flow control;
+Channel A stays JTAG). <strong>(b) DB9 + MAX232</strong> — FP_TX
+<strong>p41</strong> → T1IN → DB9 pin 2 (straight-through cable); DB9
+pin 3 → R1IN → R1OUT → divider R29 5.6 K / R30 10 K →
+<strong>p40</strong> (≈3.2 V max — safe for the 3.3 V bank, input-only).
+Path (a) is the S8 default.</td>
+<td>Peripherals sheet (MAX232 + divider inspected); sheet 2 U1C
+(FP_TX/FP_RX on p41/p40 — the vendor UCF’s <code>Serial_Tx = p41</code>,
+<code>Serial_Rx = p40</code> is correct)</td>
+</tr>
+<tr>
+<td>B5</td>
+<td>GPIO (v1)</td>
+<td><strong>LED0–LED3 = p105, p104, p102, p101</strong>, <strong>active
+HIGH</strong> (390 Ω → LED → GND). Extras (unconstrained in v1): 7-seg
+DISP0–7 = p100, 99, 98, 97, 95, 94, 93, 92 (active HIGH, common
+cathode); DIP1–3 = p81, p79, p74 (pull-ups, 0 = down); DS18B20 = p35;
+EXT_CLK = p88.</td>
+<td>Peripherals sheet (LED/DISP/DIP polarity inspected); sheet 2
+U1B/U1D; vendor UCF</td>
+</tr>
+<tr>
+<td>B6</td>
+<td>MODE strap</td>
+<td><strong>No dedicated MODE pin.</strong> Use <strong>DIP0 =
+p84</strong> (4.7 K pull-up, switch to GND: open = 1, closed = 0).
+Farad-1 adaptation: <code>MODE_INVERT = 1</code> in <code>s8_top</code>,
+so <strong>switch open (all-off default) = run application</strong>,
+switch closed = programming. Spec semantics (logical 1 = programming)
+are unchanged.</td>
+<td>Peripherals sheet (pull-ups); sheet 2 U1B (p84)</td>
+</tr>
+<tr>
+<td>B7</td>
+<td>Flash sharing</td>
+<td><strong>SHARED: the W25Q64BV is the FPGA configuration
+flash</strong>, master SPI. MSEL straps: M0 tied to VCCO (1) at p69, M1
+tied to GND (0) at p60, M2 unconnected (internal pull-down = 0). The
+bitstream occupies flash 0x000000 upward (~338 KB for the LX9). S8
+storage is relocated (Section 13.4); the configuration region is
+untouchable.</td>
+<td>User manual (.mcs flash-programming flow); sheet 2 U1C (straps
+inspected); sheet “System Memory” (U8)</td>
+</tr>
+<tr>
+<td>B8</td>
+<td>Flash part and pins</td>
+<td><strong>W25Q64BV</strong>, JEDEC ID expected <strong>0xEF 0x40
+0x17</strong>. Wiring: <strong>SCK = p70</strong> (CCLK, net FP_PR_CLK,
+board pull-up R23 4.7 K) → CK(6); <strong>CS# = p38</strong> (CSO_B, net
+FP_CSO, board pull-up R6 4.7 K) → S(1); <strong>MOSI = p64</strong> (net
+MISO0) → DI(5); <strong>MISO = p65</strong> (net MISO1) ← DO(2);
+<strong>WP# = p62</strong> (net MISO2) → pin 3 — <strong>no board
+pull-up: S8 must drive HIGH</strong>; <strong>HOLD# = p61</strong> (net
+MISO3) → pin 7 — <strong>no board pull-up: S8 must drive
+HIGH</strong>.</td>
+<td>System Memory sheet (U8 + pull-up placement inspected); sheet 2 U1C
+(pin↔︎net inspected)</td>
+</tr>
+<tr>
+<td>B9</td>
+<td>I/O voltages</td>
+<td><strong>All four banks VCCO = +3.3 V</strong> (LM1117-3.3). Every S8
+port: <strong>LVCMOS33</strong>.</td>
+<td>FPGA Power + Power Regulator sheets</td>
+</tr>
+</tbody>
+</table>
+<h2 id="farad-1-pin-table-s8-relevant">5.2 Farad-1 pin table
+(S8-relevant)</h2>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Pin</th>
+<th>Dir</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>clk</td>
+<td>p85</td>
+<td>in</td>
+<td>50 MHz; PERIOD 20.000 ns</td>
+</tr>
+<tr>
+<td>rst_n</td>
+<td>p87</td>
+<td>in</td>
+<td>Active low, RC-debounced button</td>
+</tr>
+<tr>
+<td>mode</td>
+<td>p84</td>
+<td>in</td>
+<td>DIP0; inverted in RTL (open = run app)</td>
+</tr>
+<tr>
+<td>gpio[3:0]</td>
+<td>p105, p104, p102, p101</td>
+<td>out</td>
+<td>LEDs, active high</td>
+</tr>
+<tr>
+<td>uart_rxd</td>
+<td>p83</td>
+<td>in</td>
+<td>FTDI Ch.B TXD (path a)</td>
+</tr>
+<tr>
+<td>uart_txd</td>
+<td>p82</td>
+<td>out</td>
+<td>FTDI Ch.B RXD (path a)</td>
+</tr>
+<tr>
+<td>uart2_rxd</td>
+<td>p40</td>
+<td>in</td>
+<td>DB9 via MAX232 + 5K6/10K divider (path b)</td>
+</tr>
+<tr>
+<td>uart2_txd</td>
+<td>p41</td>
+<td>out</td>
+<td>DB9 via MAX232</td>
+</tr>
+<tr>
+<td>spi_sck</td>
+<td>p70</td>
+<td>out</td>
+<td>Flash CK (CCLK pin, net FP_PR_CLK)</td>
+</tr>
+<tr>
+<td>spi_cs_n</td>
+<td>p38</td>
+<td>out</td>
+<td>Flash CS# (CSO_B; board pull-up R6)</td>
+</tr>
+<tr>
+<td>spi_mosi</td>
+<td>p64</td>
+<td>out</td>
+<td>Flash DI (net MISO0)</td>
+</tr>
+<tr>
+<td>spi_miso</td>
+<td>p65</td>
+<td>in</td>
+<td>Flash DO (net MISO1)</td>
+</tr>
+<tr>
+<td>spi_wp_n</td>
+<td>p62</td>
+<td>out</td>
+<td>Drive HIGH — no board pull-up</td>
+</tr>
+<tr>
+<td>spi_hold_n</td>
+<td>p61</td>
+<td>out</td>
+<td>Drive HIGH — no board pull-up</td>
+</tr>
+</tbody>
+</table>
+<p>Left unconstrained and unused in v1: SRAM IS61WV5128 (512 KiB × 8:
+MEM_D0-7 = p142, 141, 140, 139, 112, 111, 119, 120; ADD0-18 = p6, 5, 2,
+1, 144, 137, 134, 133, 132, 131, 118, 117, 116, 115, 114, 123, 124, 126,
+127; MEM_CE = p143, MEM_WE = p138, MEM_OE = p121 — reserved for a future
+XIP/data-expansion phase), 7-segment, DIP1–3, DS18B20, EXT_CLK, FTDI
+FIFO handshake lines.</p>
+<h2 id="remaining-hardware-checks-bring-up-time-not-design-unknowns">5.3
+Remaining hardware checks (bring-up time; not design unknowns)</h2>
+<ol type="1">
+<li><strong>Flash-pin confirmation</strong>: the B8 map was read from
+schematic renders; confirm it on hardware with the Phase-5 JEDEC read.
+If 0x9F fails, swap p64/p65 (MOSI/MISO) first; a power-off continuity
+check (flash pin ↔︎ FPGA pin, diode mode) settles it in minutes.</li>
+<li><strong>FT_PROG step</strong>: back up the FT2232H EEPROM, then set
+Channel B function = UART (no flow control) once. Record the backup in
+<code>docs/board-bringup.md</code>.</li>
+<li><strong>VCCAUX</strong>: vendor power design (2.5 V per UG380
+expectations); S8 does not use it — recorded so nobody wires analog or
+aux-dependent logic into the plan.</li>
+</ol>
+<h2 id="spartan-6-lx9-resource-budget-xc6slx9-2tqg144c-ds160-family-table">5.4
+Spartan-6 LX9 resource budget (XC6SLX9-2TQG144C, DS160 family
+table)</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Device total</th>
+<th>S8 v1 use</th>
+<th>Remaining</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Logic cells</td>
+<td>9,152</td>
+<td>est. 3,000–4,500 (CPU + UART + SPI + boot control)</td>
+<td>ample</td>
+</tr>
+<tr>
+<td>Slices (4 LUT + 8 FF each)</td>
+<td>1,430</td>
+<td>est. 700–900 ≈ <strong>50–60 %</strong> (budget gate: ≤ 60 %,
+Section 16.5)</td>
+<td>~500+ for compiler/debugger phases</td>
+</tr>
+<tr>
+<td>Block RAM (18 Kb blocks)</td>
+<td>32 (576 Kb total)</td>
+<td><strong>4</strong> — program RAM (4096 × 16 = 64 Kb in 2048×9 mode,
+2 wide × 2 deep)</td>
+<td>28</td>
+</tr>
+<tr>
+<td>Distributed RAM (max)</td>
+<td>90 Kb</td>
+<td>small — data RAM (240 × 8) + 2 × 16-byte UART FIFOs (~32 LUTs)</td>
+<td>ample</td>
+</tr>
+<tr>
+<td>DSP48A1 slices</td>
+<td>16</td>
+<td><strong>0</strong> (no multiply instruction in ISA v1)</td>
+<td>all 16</td>
+</tr>
+<tr>
+<td>Global clock nets used</td>
+<td>4 × 16 (4 clock regions)</td>
+<td><strong>1</strong> (oscillator, p85); no CMT/DCM — baud via phase
+accumulator</td>
+<td>—</td>
+</tr>
+<tr>
+<td>CMTs (DCM + PLL)</td>
+<td>2</td>
+<td>0</td>
+<td>—</td>
+</tr>
+<tr>
+<td>User I/O (TQG144 package)</td>
+<td>102</td>
+<td>~12 S8 ports (clk, rst, mode, 4 LED, 2 UART, 4–6 SPI) +
+SRAM/7-seg/DIP reserved</td>
+<td>rest unused in v1</td>
+</tr>
+</tbody>
+</table>
+<p>Notes: the design fits comfortably; the tightest axis is
+<strong>slices</strong> (not BRAM). If utilization approaches the 60 %
+gate, the first reductions are: RX FIFO depth 16 → 8, optional GPIO_DIR
+register removal, and the ROL/ROR shift variants (funct space already
+reserved). BRAM usage is deliberately conservative so a future
+XIP/instruction-fetch phase (Section 19.2) can claim 4–8 more blocks.
+Sources: DS160 family overview table (logic cells / slices / FFs /
+distributed RAM / DSP / BRAM per device) — cross-checked against two
+independent part summaries.</p>
+<hr />
+<h1 id="instruction-set-architecture-v1-frozen">6. Instruction set
+architecture v1 (FROZEN)</h1>
+<p>Version note: v1 replaces the unfrozen starter encoding. Three
+starter instructions keep their exact words (<code>LDI R0,1</code> =
+<code>0x1001</code>, <code>OUT GPIO_OUT,R0</code> = <code>0x5000</code>,
+<code>JMP 0x002</code> = <code>0x4002</code>) so starter testbenches
+still carry value. Any future change requires ISA v2, a new document
+revision, and regeneration of all golden vectors.</p>
+<h2 id="programmers-model">6.1 Programmer’s model</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Size</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R0–R7</td>
+<td>8 × 8-bit</td>
+<td>General purpose. R0 is <strong>not</strong> hardwired to zero. No
+register is reserved by hardware; the ABI (Section 19.3) reserves some
+by convention.</td>
+</tr>
+<tr>
+<td>PC</td>
+<td>12-bit</td>
+<td>Word address, range 0x000–0xFFF. Instruction words are 16 bits.</td>
+</tr>
+<tr>
+<td>SP</td>
+<td>8-bit</td>
+<td>Stack pointer, byte address in data space. Reset value 0xF0 (empty
+stack).</td>
+</tr>
+<tr>
+<td>Flags</td>
+<td>Z, C, N, O</td>
+<td>Zero, Carry, Negative (bit 7), oVerflow (signed). Updated only by
+instructions listed in 6.5.</td>
+</tr>
+<tr>
+<td>Halt bit</td>
+<td>1</td>
+<td>Set by <code>HALT</code>; cleared by reset or by writing
+CPU_CONTROL.resume.</td>
+</tr>
+<tr>
+<td>Trap bit</td>
+<td>1</td>
+<td>Set by illegal opcode / illegal branch condition / stack fault;
+cleared only by reset.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="instruction-formats">6.2 Instruction formats</h2>
+<p>All instructions are exactly 16 bits. <code>op</code> = bits
+[15:12].</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Format</th>
+<th>Fields</th>
+<th>Used by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R (register)</td>
+<td>op[15:12], rd[11:9], rs[8:6], funct[5:3], 000[2:0]</td>
+<td>ALU reg-reg, SHIFT</td>
+</tr>
+<tr>
+<td>I8 (immediate 8)</td>
+<td>op[15:12], rd[11:9], imm8[7:0]</td>
+<td>LDI</td>
+</tr>
+<tr>
+<td>RI (reg + imm6)</td>
+<td>op[15:12], rd[11:9], funct[8:7], 0[6], imm6[5:0]</td>
+<td>ADDI/ANDI/ORI/CMPI</td>
+</tr>
+<tr>
+<td>M (memory)</td>
+<td>op[15:12], rd[11:9], rs[8:6]</td>
+<td>LD, ST</td>
+</tr>
+<tr>
+<td>A (address)</td>
+<td>op[15:12], addr12[11:0]</td>
+<td>JMP, CALL</td>
+</tr>
+<tr>
+<td>P (port)</td>
+<td>OUT: op, port[11:9], rs[8:6]. IN: op, rd[11:9], port[8:6]</td>
+<td>IN, OUT</td>
+</tr>
+<tr>
+<td>B (branch)</td>
+<td>op[15:12], cond[11:9], rel8[7:0]</td>
+<td>Jcc</td>
+</tr>
+<tr>
+<td>S (single)</td>
+<td>op[15:12], 000000000000</td>
+<td>RET, HALT</td>
+</tr>
+<tr>
+<td>U (unary reg)</td>
+<td>op[15:12], rd[11:9], 000000000</td>
+<td>PUSH, POP</td>
+</tr>
+</tbody>
+</table>
+<p>Unused bits must be encoded as zero. Assemblers must emit zero for
+them; decoders must treat non-zero unused bits as an <strong>illegal
+opcode</strong> (trap), so that encoding drift is detected early rather
+than silently tolerated.</p>
+<h2 id="opcode-map">6.3 Opcode map</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>op</th>
+<th>Mnemonic</th>
+<th>Format</th>
+<th>Semantics summary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x0</td>
+<td>ALU reg-reg</td>
+<td>R</td>
+<td>ADD, SUB, AND, OR, XOR, CMP, MOV, NOT (funct 0–7)</td>
+</tr>
+<tr>
+<td>0x1</td>
+<td>LDI</td>
+<td>I8</td>
+<td>rd ← zero-extend(imm8)</td>
+</tr>
+<tr>
+<td>0x2</td>
+<td>ALU imm</td>
+<td>RI</td>
+<td>ADDI, ANDI, ORI, CMPI (funct 0–3), imm6</td>
+</tr>
+<tr>
+<td>0x3</td>
+<td>LD</td>
+<td>M</td>
+<td>rd ← M[rs]</td>
+</tr>
+<tr>
+<td>0x4</td>
+<td>JMP</td>
+<td>A</td>
+<td>PC ← addr12</td>
+</tr>
+<tr>
+<td>0x5</td>
+<td>OUT</td>
+<td>P</td>
+<td>Port[port] ← Rs</td>
+</tr>
+<tr>
+<td>0x6</td>
+<td>Jcc</td>
+<td>B</td>
+<td>Conditional PC ← PC + 1 + sext(rel8)</td>
+</tr>
+<tr>
+<td>0x7</td>
+<td>CALL</td>
+<td>A</td>
+<td>Push return address; PC ← addr12</td>
+</tr>
+<tr>
+<td>0x8</td>
+<td>ST</td>
+<td>M</td>
+<td>M[rs] ← rd</td>
+</tr>
+<tr>
+<td>0x9</td>
+<td>RET</td>
+<td>S</td>
+<td>PC ← pop</td>
+</tr>
+<tr>
+<td>0xA</td>
+<td>IN</td>
+<td>P</td>
+<td>rd ← Port[port]</td>
+</tr>
+<tr>
+<td>0xB</td>
+<td>PUSH</td>
+<td>U</td>
+<td>Push rd</td>
+</tr>
+<tr>
+<td>0xC</td>
+<td>POP</td>
+<td>U</td>
+<td>Pop into rd</td>
+</tr>
+<tr>
+<td>0xD</td>
+<td>SHIFT</td>
+<td>R</td>
+<td>SHL, SHR, ROL, ROR (funct 0–3), amount = Rs[2:0]</td>
+</tr>
+<tr>
+<td>0xE</td>
+<td>reserved</td>
+<td>—</td>
+<td><strong>Illegal opcode → TRAP</strong></td>
+</tr>
+<tr>
+<td>0xF</td>
+<td>HALT</td>
+<td>S</td>
+<td>Halt until reset or resume</td>
+</tr>
+</tbody>
+</table>
+<h2 id="instruction-reference">6.4 Instruction reference</h2>
+<p>Field names below refer to Section 6.2. <code>M[x]</code> is the
+data-space byte at address x. <code>sext</code> is sign extension to 8
+bits. <code>PC_after</code> = address of the instruction following the
+current one (PC + 1, wrapping within 12 bits).</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Mnemonic</th>
+<th>Encoding</th>
+<th>Semantics</th>
+<th>Flags</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ADD rd, rs</td>
+<td>0x0, funct=0</td>
+<td>{C, rd} ← rd + rs (9-bit sum)</td>
+<td>Z C N O</td>
+</tr>
+<tr>
+<td>SUB rd, rs</td>
+<td>0x0, funct=1</td>
+<td>{B, rd} ← rd − rs; C = NOT borrow (C=1 iff rd ≥ rs)</td>
+<td>Z C N O</td>
+</tr>
+<tr>
+<td>AND rd, rs</td>
+<td>0x0, funct=2</td>
+<td>rd ← rd &amp; rs</td>
+<td>Z, N; C←0, O←0</td>
+</tr>
+<tr>
+<td>OR rd, rs</td>
+<td>0x0, funct=3</td>
+<td>rd ← rd | rs</td>
+<td>Z, N; C←0, O←0</td>
+</tr>
+<tr>
+<td>XOR rd, rs</td>
+<td>0x0, funct=4</td>
+<td>rd ← rd ^ rs</td>
+<td>Z, N; C←0, O←0</td>
+</tr>
+<tr>
+<td>CMP rd, rs</td>
+<td>0x0, funct=5</td>
+<td>Compute rd − rs; discard result, keep flags only</td>
+<td>Z C N O</td>
+</tr>
+<tr>
+<td>MOV rd, rs</td>
+<td>0x0, funct=6</td>
+<td>rd ← rs</td>
+<td>Z, N; C←0, O←0</td>
+</tr>
+<tr>
+<td>NOT rd, rs</td>
+<td>0x0, funct=7</td>
+<td>rd ← ~rs (note: source is rs, not rd)</td>
+<td>Z, N; C←0, O←0</td>
+</tr>
+<tr>
+<td>LDI rd, imm8</td>
+<td>0x1</td>
+<td>rd ← imm8</td>
+<td>Z, N (of result); C←0, O←0</td>
+</tr>
+<tr>
+<td>ADDI rd, imm6</td>
+<td>0x2, funct=0</td>
+<td>rd ← rd + zext(imm6)</td>
+<td>Z C N O</td>
+</tr>
+<tr>
+<td>ANDI rd, imm6</td>
+<td>0x2, funct=1</td>
+<td>rd ← rd &amp; zext(imm6)</td>
+<td>Z, N; C←0, O←0</td>
+</tr>
+<tr>
+<td>ORI rd, imm6</td>
+<td>0x2, funct=2</td>
+<td>rd ← rd | zext(imm6)</td>
+<td>Z, N; C←0, O←0</td>
+</tr>
+<tr>
+<td>CMPI rd, imm6</td>
+<td>0x2, funct=3</td>
+<td>flags only, from rd − zext(imm6)</td>
+<td>Z C N O</td>
+</tr>
+<tr>
+<td>LD rd, [rs]</td>
+<td>0x3</td>
+<td>rd ← M[rs]</td>
+<td>unchanged</td>
+</tr>
+<tr>
+<td>ST rd, [rs]</td>
+<td>0x8</td>
+<td>M[rs] ← rd (base in rs, data in rd — mirrors LD)</td>
+<td>unchanged</td>
+</tr>
+<tr>
+<td>JMP addr12</td>
+<td>0x4</td>
+<td>PC ← addr12</td>
+<td>unchanged</td>
+</tr>
+<tr>
+<td>JZ / JNZ / JC / JNC / JN / JP / JO rel8</td>
+<td>0x6, cond 0–6</td>
+<td>if condition: PC ← PC_after + sext(rel8)</td>
+<td>unchanged</td>
+</tr>
+<tr>
+<td>(cond=7)</td>
+<td>0x6</td>
+<td><strong>Illegal → TRAP</strong></td>
+<td>unchanged</td>
+</tr>
+<tr>
+<td>CALL addr12</td>
+<td>0x7</td>
+<td>push PC_after; PC ← addr12</td>
+<td>unchanged</td>
+</tr>
+<tr>
+<td>RET</td>
+<td>0x9</td>
+<td>PC ← pop</td>
+<td>unchanged</td>
+</tr>
+<tr>
+<td>IN rd, port</td>
+<td>0xA</td>
+<td>rd ← Port[port]</td>
+<td>unchanged</td>
+</tr>
+<tr>
+<td>OUT port, rs</td>
+<td>0x5</td>
+<td>Port[port] ← rs</td>
+<td>unchanged</td>
+</tr>
+<tr>
+<td>PUSH rd</td>
+<td>0xB</td>
+<td>push rd</td>
+<td>unchanged</td>
+</tr>
+<tr>
+<td>POP rd</td>
+<td>0xC</td>
+<td>rd ← pop</td>
+<td>unchanged</td>
+</tr>
+<tr>
+<td>SHL rd, rs</td>
+<td>0xD, funct=0</td>
+<td>{C, rd} ← rd &lt;&lt; Rs[2:0] (C = last bit out)</td>
+<td>Z N C; O←0</td>
+</tr>
+<tr>
+<td>SHR rd, rs</td>
+<td>0xD, funct=1</td>
+<td>logical right shift; C = last bit out</td>
+<td>Z N C; O←0</td>
+</tr>
+<tr>
+<td>ROL rd, rs</td>
+<td>0xD, funct=2</td>
+<td>rotate left through rd, no C participation</td>
+<td>Z N; C←0, O←0</td>
+</tr>
+<tr>
+<td>ROR rd, rs</td>
+<td>0xD, funct=3</td>
+<td>rotate right through rd, no C participation</td>
+<td>Z N; C←0, O←0</td>
+</tr>
+<tr>
+<td>HALT</td>
+<td>0xF</td>
+<td>Halt bit ← 1; CPU stops retiring until resume or reset</td>
+<td>unchanged</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Semantics notes.</strong></p>
+<ul>
+<li>Branch targets:
+<code>target = (PC_after + sext(rel8)) mod 4096</code>. The assembler
+computes <code>rel8 = target_label − PC_after</code>. Range −128..+127
+from PC_after; out-of-range is an assembler error. Automatic relaxation
+(inverted branch over a <code>JMP</code>) is specified as assembler
+behavior for v1: when a <code>Jcc</code> target is out of range, the
+assembler emits <code>inverted-cc +3; JMP target</code> and reports the
+rewrite in verbose mode.</li>
+<li><code>LD</code>/<code>ST</code> addresses are full 8-bit data-space
+addresses held in rs; the MMIO region 0xF0–0xFF is reachable by ordinary
+<code>LD</code>/<code>ST</code> but the canonical access path is
+<code>IN</code>/<code>OUT</code> (identical hardware decode;
+<code>IN</code>/<code>OUT</code> exist for code density and
+clarity).</li>
+<li>Shift amounts use only rs[2:0]; a shift by 8 behaves as a shift by 0
+(copies rd to rd, sets Z/N from the unchanged value, C←0 for
+SHL/SHR).</li>
+</ul>
+<h2 id="flag-formulas-normative">6.5 Flag formulas (normative)</h2>
+<p>Let a, b be the 8-bit operands, and r the 8-bit result.</p>
+<ul>
+<li>ADD/ADDI: <code>sum9 = {1&#39;b0,a} + {1&#39;b0,b}</code>;
+<code>r = sum9[7:0]</code>; <code>C = sum9[8]</code>;
+<code>Z = (r == 0)</code>; <code>N = r[7]</code>;
+<code>O = (a[7] == b[7]) &amp;&amp; (r[7] != a[7])</code>.</li>
+<li>SUB/CMP/CMPI: <code>diff9 = {1&#39;b0,a} - {1&#39;b0,b}</code>;
+<code>r = diff9[7:0]</code>; <code>C = ~diff9[8]</code> (C = 1 when a ≥
+b, unsigned); <code>Z, N</code> from r;
+<code>O = (a[7] != b[7]) &amp;&amp; (r[7] != a[7])</code>.</li>
+<li>AND/OR/XOR/NOT/MOV/LDI: <code>Z, N</code> from result;
+<code>C = 0</code>; <code>O = 0</code>.</li>
+<li>SHL: <code>C</code> = last bit shifted out (the bit leaving position
+7); SHR likewise from position 0; ROL/ROR: <code>C = 0</code>.</li>
+<li>All other instructions leave every flag unchanged.</li>
+<li>Reset clears Z, C, N, O.</li>
+</ul>
+<h2 id="halt-trap-and-stack-faults">6.6 HALT, TRAP, and stack
+faults</h2>
+<ul>
+<li><code>HALT</code> sets the halt bit. The CPU remains in the HALT
+state, keeps servicing nothing, and exits only via CPU_CONTROL.resume
+(port 6, bit 0) or reset. Halt is a <em>legitimate</em> program state:
+BOOT_STATUS and CPU_CONTROL remain readable while halted.</li>
+<li>TRAP is entered on: opcode 0xE; any R-format instruction with
+non-zero bits [2:0]; RI-format with bit 6 set; any unused field pattern
+not defined above; branch condition 7; PUSH/POP/CALL/RET when SP is
+outside the legal range 0xE0–0xF0 before or after the operation. TRAP
+latches the trap bit; the CPU stops retiring until reset. Trap is not
+resumable by design: it indicates a bug, and the debug strategy is reset
++ BOOT_STATUS/CPU_CONTROL inspection.</li>
+<li>Stack bounds: SP starts at 0xF0 (empty). PUSH/CALL decrement before
+use; POP/RET read then increment. Usable depth is 16 entries (0xEF down
+to 0xE0). A faulting stack operation leaves SP and memory unmodified
+(check before commit).</li>
+</ul>
+<h2 id="golden-encoding-vectors">6.7 Golden encoding vectors</h2>
+<p>These words are normative. They were machine-generated from the
+encoding rules above and must appear verbatim as pass criteria in the
+Rust tests (<code>s8-isa</code>) and the RTL instruction-vector
+testbench.</p>
+<table>
+<thead>
+<tr>
+<th>Assembly</th>
+<th>Word</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LDI R0, 1</code></td>
+<td><code>0x1001</code></td>
+</tr>
+<tr>
+<td><code>OUT GPIO_OUT, R0</code></td>
+<td><code>0x5000</code></td>
+</tr>
+<tr>
+<td><code>JMP 0x002</code></td>
+<td><code>0x4002</code></td>
+</tr>
+<tr>
+<td><code>ADD R2, R3</code></td>
+<td><code>0x04C0</code></td>
+</tr>
+<tr>
+<td><code>SUB R7, R1</code></td>
+<td><code>0x0E48</code></td>
+</tr>
+<tr>
+<td><code>AND R4, R5</code></td>
+<td><code>0x0950</code></td>
+</tr>
+<tr>
+<td><code>OR R0, R7</code></td>
+<td><code>0x01D8</code></td>
+</tr>
+<tr>
+<td><code>XOR R6, R6</code></td>
+<td><code>0x0DA0</code></td>
+</tr>
+<tr>
+<td><code>CMP R1, R2</code></td>
+<td><code>0x02A8</code></td>
+</tr>
+<tr>
+<td><code>MOV R1, R0</code></td>
+<td><code>0x0230</code></td>
+</tr>
+<tr>
+<td><code>NOT R4</code></td>
+<td><code>0x0838</code></td>
+</tr>
+<tr>
+<td><code>NOP</code> (= <code>MOV R0, R0</code>)</td>
+<td><code>0x0030</code></td>
+</tr>
+<tr>
+<td><code>LDI R7, 255</code></td>
+<td><code>0x1EFF</code></td>
+</tr>
+<tr>
+<td><code>LDI R3, 0xA5</code></td>
+<td><code>0x16A5</code></td>
+</tr>
+<tr>
+<td><code>ADDI R0, 5</code></td>
+<td><code>0x2005</code></td>
+</tr>
+<tr>
+<td><code>ANDI R1, 0x0F</code></td>
+<td><code>0x228F</code></td>
+</tr>
+<tr>
+<td><code>ORI R2, 0x30</code></td>
+<td><code>0x2530</code></td>
+</tr>
+<tr>
+<td><code>CMPI R1, 0</code></td>
+<td><code>0x2380</code></td>
+</tr>
+<tr>
+<td><code>LD R1, [R0]</code></td>
+<td><code>0x3200</code></td>
+</tr>
+<tr>
+<td><code>LD R5, [R7]</code></td>
+<td><code>0x3BC0</code></td>
+</tr>
+<tr>
+<td><code>ST R1, [R0]</code></td>
+<td><code>0x8200</code></td>
+</tr>
+<tr>
+<td><code>ST R0, [R7]</code></td>
+<td><code>0x81C0</code></td>
+</tr>
+<tr>
+<td><code>JMP 0xFFF</code></td>
+<td><code>0x4FFF</code></td>
+</tr>
+<tr>
+<td><code>CALL 0x123</code></td>
+<td><code>0x7123</code></td>
+</tr>
+<tr>
+<td><code>RET</code></td>
+<td><code>0x9000</code></td>
+</tr>
+<tr>
+<td><code>JZ .-3</code></td>
+<td><code>0x60FD</code></td>
+</tr>
+<tr>
+<td><code>JNZ .-1</code></td>
+<td><code>0x62FF</code></td>
+</tr>
+<tr>
+<td><code>JC .+127</code></td>
+<td><code>0x647F</code></td>
+</tr>
+<tr>
+<td><code>JN .-128</code></td>
+<td><code>0x6880</code></td>
+</tr>
+<tr>
+<td><code>IN R1, UART_STATUS</code></td>
+<td><code>0xA2C0</code></td>
+</tr>
+<tr>
+<td><code>IN R0, UART_DATA</code></td>
+<td><code>0xA100</code></td>
+</tr>
+<tr>
+<td><code>IN R2, GPIO_IN</code></td>
+<td><code>0xA440</code></td>
+</tr>
+<tr>
+<td><code>OUT UART_DATA, R0</code></td>
+<td><code>0x5800</code></td>
+</tr>
+<tr>
+<td><code>OUT GPIO_DIR, R3</code></td>
+<td><code>0x54C0</code></td>
+</tr>
+<tr>
+<td><code>PUSH R5</code></td>
+<td><code>0xBA00</code></td>
+</tr>
+<tr>
+<td><code>POP R5</code></td>
+<td><code>0xCA00</code></td>
+</tr>
+<tr>
+<td><code>SHL R2, R3</code></td>
+<td><code>0xD4C0</code></td>
+</tr>
+<tr>
+<td><code>SHR R2, R3</code></td>
+<td><code>0xD4C8</code></td>
+</tr>
+<tr>
+<td><code>ROL R1, R4</code></td>
+<td><code>0xD310</code></td>
+</tr>
+<tr>
+<td><code>ROR R1, R4</code></td>
+<td><code>0xD318</code></td>
+</tr>
+<tr>
+<td><code>HALT</code></td>
+<td><code>0xF000</code></td>
+</tr>
+</tbody>
+</table>
+<p>Note: instruction word <code>0x0000</code> is
+<code>ADD R0, R0</code>, a <strong>real instruction</strong>, not a NOP.
+Programs must never rely on zero-filled memory executing as NOP. The
+assembler pseudo-op <code>NOP</code> emits <code>0x0030</code>
+(<code>MOV R0, R0</code>).</p>
+<p>The generator that produced this table
+(<code>tools/gen_isa_vectors.js</code>) also exports machine-readable
+vectors to <code>tb/vectors/</code> for the RTL testbenches and to the
+Rust test data; regenerate after any approved ISA change.</p>
+<h2 id="assembler-syntax">6.8 Assembler syntax</h2>
+<ul>
+<li>Case-insensitive mnemonics and register names
+(<code>R0</code>–<code>R7</code>).</li>
+<li>Comments start with <code>;</code> and run to end of line.</li>
+<li>Labels: <code>name:</code> at the start of a line, bound to the next
+emitted word address.</li>
+<li>Numbers: decimal (<code>42</code>), hex (<code>0x2A</code>), binary
+(<code>0b101010</code>). Negative decimals allowed for relative branch
+operands.</li>
+<li>Register indirect operands: <code>[Rn]</code>.</li>
+<li>Branch operands: label or explicit relative value (<code>.-3</code>,
+<code>.+2</code>, or a raw number interpreted as relative offset —
+labels are strongly preferred).</li>
+<li>Port names are predefined symbols: <code>GPIO_OUT</code>=0,
+<code>GPIO_IN</code>=1, <code>GPIO_DIR</code>=2,
+<code>UART_STATUS</code>=3, <code>UART_DATA</code>=4,
+<code>BOOT_STATUS</code>=5, <code>CPU_CONTROL</code>=6.</li>
+<li>Directives: <code>.org &lt;word_addr&gt;</code> (set location
+counter for program memory),
+<code>.word &lt;w&gt;[, &lt;w&gt;...]</code> (emit raw 16-bit words),
+<code>.byte &lt;b&gt;[, &lt;b&gt;...]</code> (emit bytes, packed two per
+word, <strong>high byte first</strong>),
+<code>.equ &lt;name&gt;, &lt;value&gt;</code> (constant),
+<code>.ascii &quot;text&quot;</code> (emit bytes, high-byte-first packing, same
+rule as .byte).</li>
+<li>Pseudo-ops expanded by the assembler: <code>NOP</code> →
+<code>MOV R0,R0</code>; <code>BRA label</code> → <code>JMP label</code>;
+<code>LDI16 rd, &lt;16-bit&gt;</code> →
+<code>LDI rd, hi8; ORI rd, lo8</code> — <strong>rejected</strong> unless
+rd is documented as scratch by the programmer (it overwrites rd twice;
+emitted with a warning).</li>
+<li>Errors are mandatory (with file, line, column, and
+expected-vs-found): unknown mnemonic, bad register, immediate out of
+range for its format (imm8 &gt; 255, imm6 &gt; 63), duplicate label,
+undefined label, branch target out of relative range after relaxation,
+<code>.org</code> backwards overlap, image exceeding 8192 bytes.</li>
+</ul>
+<h2 id="worked-programs-normative-listings">6.9 Worked programs
+(normative listings)</h2>
+<h3 id="gpio-blink-seed-3-words">6.9.1 GPIO blink-seed (3 words)</h3>
+<pre><code>        LDI  R0, 1          ; 0x1001
+        OUT  GPIO_OUT, R0   ; 0x5000
+loop:   JMP  loop           ; 0x4002</code></pre>
+<p>Words: <code>0x1001 0x5000 0x4002</code>. This is the hardware smoke
+test for Phase 2.</p>
+<h3 id="uart-echo-9-words">6.9.2 UART echo (9 words)</h3>
+<pre><code>start:  IN   R1, UART_STATUS  ; 0xA2C0
+        ANDI R1, 0x01         ; 0x2281   ; RX_VALID
+        JZ   start            ; 0x60FD
+        IN   R0, UART_DATA    ; 0xA100   ; pop RX FIFO
+wait:   IN   R1, UART_STATUS  ; 0xA2C0
+        ANDI R1, 0x02         ; 0x2282   ; TX_READY
+        JZ   wait             ; 0x60FD
+        OUT  UART_DATA, R0    ; 0x5800
+        JMP  start            ; 0x4000</code></pre>
+<p>Words:
+<code>0xA2C0 0x2281 0x60FD 0xA100 0xA2C0 0x2282 0x60FD 0x5800 0x4000</code>.
+Both relative branches resolve to −3.</p>
+<h3 id="stack-call-ret-demo">6.9.3 Stack / CALL-RET demo</h3>
+<pre><code>        LDI  R1, 5
+        CALL work              ; R1 = 10 after return
+        HALT
+work:   PUSH R1
+        ADD  R1, R1
+        POP  R1
+        ; ... recompute: the demo doubles R1 then restores — shown to exercise
+        ; CALL/RET/PUSH/POP encodings; real code uses the ABI in Section 19.3.
+        RET</code></pre>
+<p>The assembler test suite must round-trip this program and check it
+against hand-computed words.</p>
+<hr />
+<h1 id="memory-architecture">7. Memory architecture</h1>
+<h2 id="program-memory">7.1 Program memory</h2>
+<ul>
+<li>4096 × 16-bit synchronous BRAM (8 KiB), word-addressed by the 12-bit
+PC.</li>
+<li>Single read port shared between the CPU fetch path and the boot
+loader. The loader has priority only while the CPU is held in reset; the
+mux in <code>s8_program_ram</code> must never grant both in the same
+cycle (assertion in simulation).</li>
+<li>Synchronous read: address registered at the clock edge, data valid
+on the following edge. The CPU FSM accounts for this latency (Section
+8.3).</li>
+<li>Byte order within a word: the byte at even image offset is the
+<strong>high</strong> byte (bits [15:8]). A word at address k holds
+image bytes <code>2k</code> (high) and <code>2k+1</code> (low). All of
+assembler output, <code>.s8img</code> payloads, flash bytes, and loader
+logic obey this single rule.</li>
+<li>No write port is exposed to the application in v1; only the loader
+writes program RAM.</li>
+</ul>
+<h2 id="data-memory">7.2 Data memory</h2>
+<ul>
+<li>Data address space is 8 bits (256 bytes total).</li>
+<li><code>s8_data_ram</code>: 240 × 8 synchronous RAM at 0x00–0xEF. Same
+single-cycle sync-read semantics as program RAM.</li>
+<li>Software convention (not enforced by hardware beyond stack bounds):
+0x00–0xDF variables, 0xE0–0xEF stack region.</li>
+<li>0xF0–0xFF is MMIO, decoded by <code>s8_bus</code> outside the RAM
+chip select. 0xF8–0xFF are reserved: reads return 0x00, writes are
+ignored, no trap.</li>
+</ul>
+<h2 id="mmio-register-map-ports-07-at-addresses-0xf00xf7">7.3 MMIO
+register map (ports 0–7 at addresses 0xF0–0xF7)</h2>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>Addr</th>
+<th>Port</th>
+<th>Name</th>
+<th>Access</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0xF0</td>
+<td>0</td>
+<td>GPIO_OUT</td>
+<td>R/W</td>
+<td>Bits [3:0] drive GPIO pads when the corresponding DIR bit is 1.
+Reset value 0x00.</td>
+</tr>
+<tr>
+<td>0xF1</td>
+<td>1</td>
+<td>GPIO_IN</td>
+<td>R</td>
+<td>Bits [3:0]: two-flop-synchronized pad samples. Read-only.</td>
+</tr>
+<tr>
+<td>0xF2</td>
+<td>2</td>
+<td>GPIO_DIR</td>
+<td>R/W</td>
+<td>Bit = 1 → pad is an output. Reset value 0x0F (all outputs; keeps the
+LED demo working out of reset).</td>
+</tr>
+<tr>
+<td>0xF3</td>
+<td>3</td>
+<td>UART_STATUS</td>
+<td>R</td>
+<td>bit0 RX_VALID (RX FIFO non-empty); bit1 TX_READY (TX FIFO not full);
+bit2 RX_FRAME_ERR (sticky, cleared by reading UART_DATA); bit3
+RX_OVERRUN (sticky, cleared by reading UART_DATA).</td>
+</tr>
+<tr>
+<td>0xF4</td>
+<td>4</td>
+<td>UART_DATA</td>
+<td>R/W</td>
+<td>Read: pop one byte from RX FIFO (returns 0x00 if empty; clears
+sticky error bits). Write: push one byte to TX FIFO (write ignored when
+TX FIFO full).</td>
+</tr>
+<tr>
+<td>0xF5</td>
+<td>5</td>
+<td>BOOT_STATUS</td>
+<td>R</td>
+<td>bit0 MODE_LATCHED (1 = programming mode); bit1 IMAGE_VALID (a valid
+image was found at boot); bits[4:2] BOOT_ERR: 0 none, 1 no valid image,
+2 image CRC mismatch, 3 flash ID mismatch, 4 flash timeout.</td>
+</tr>
+<tr>
+<td>0xF6</td>
+<td>6</td>
+<td>CPU_CONTROL</td>
+<td>R/W</td>
+<td>Write: bit0 = 1 → clear halt (resume); bit1 = 1 → soft reset request
+(re-enters the boot flow with latched MODE). Read: bit0 HALTED, bit1
+TRAPPED, bit2 RUNNING.</td>
+</tr>
+<tr>
+<td>0xF7</td>
+<td>7</td>
+<td>—</td>
+<td>—</td>
+<td>Reserved, reads 0x00.</td>
+</tr>
+</tbody>
+</table>
+<p>Reads of write-only fields and writes to read-only fields are benign
+(return 0 / ignored). All GPIO inputs are synchronized; no combinational
+path from any pad reaches CPU control logic.</p>
+<hr />
+<h1 id="cpu-microarchitecture">8. CPU microarchitecture</h1>
+<h2 id="datapath">8.1 Datapath</h2>
+<ul>
+<li>8 × 8-bit register file, two read ports, one write port, synchronous
+write, asynchronous read (distributed RAM; the file is small).</li>
+<li>ALU: combinational; computes result and the four flags per Section
+6.5. Flags live in a flag register updated at the EXECUTE→next
+transition when the decoded instruction writes flags.</li>
+<li>PC: 12-bit, with increment, jump, branch, call (push PC_after), and
+return (pop) paths.</li>
+<li>SP: 8-bit with increment/decrement and bounds comparator against
+0xE0–0xF0.</li>
+<li>Imm extraction unit: imm8, imm6 (zero-extended), addr12, rel8
+(sign-extended), all from the latched instruction word.</li>
+</ul>
+<h2 id="control-fsm-multicycle-one-instruction-per-state-sequence">8.2
+Control FSM (multicycle, one instruction per state sequence)</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>State</th>
+<th>Action</th>
+<th>Next</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RESET</td>
+<td>Outputs held safe; PC ← 0; SP ← 0xF0; flags cleared</td>
+<td>FETCH_REQ</td>
+</tr>
+<tr>
+<td>FETCH_REQ</td>
+<td>Drive program-RAM address = PC</td>
+<td>FETCH_WAIT</td>
+</tr>
+<tr>
+<td>FETCH_WAIT</td>
+<td>Wait one cycle for synchronous read; latch instruction word</td>
+<td>DECODE</td>
+</tr>
+<tr>
+<td>DECODE</td>
+<td>Decode opcode/funct; validate unused bits; extract immediates</td>
+<td>EXECUTE, or TRAP on illegal encoding</td>
+</tr>
+<tr>
+<td>EXECUTE</td>
+<td>ALU operation; register file write; flag update; or port read via
+<code>IN</code></td>
+<td>MEM (for LD/ST/PUSH/POP/CALL/RET stack access), otherwise
+FETCH_REQ</td>
+</tr>
+<tr>
+<td>MEM</td>
+<td>Drive data bus: address, we/re; one cycle for synchronous RAM or
+MMIO</td>
+<td>FETCH_REQ (writeback folded into MEM)</td>
+</tr>
+<tr>
+<td>HALT</td>
+<td>CPU idle; BOOT_STATUS/CPU_CONTROL readable</td>
+<td>FETCH_REQ on resume, RESET on soft reset</td>
+</tr>
+<tr>
+<td>TRAP</td>
+<td>Latched stop</td>
+<td>RESET only</td>
+</tr>
+</tbody>
+</table>
+<p>Any state combined with an active reset returns to RESET. The
+multicycle structure means one instruction takes 3–5 cycles; there is no
+requirement to optimize this in v1. Correctness first: every state must
+be able to reach HALT or TRAP when the opcode demands it, and no state
+may retire two instructions.</p>
+<h2 id="bus-interface-and-wait-states">8.3 Bus interface and wait
+states</h2>
+<p>The CPU presents to <code>s8_bus</code>: <code>addr[7:0]</code>,
+<code>re</code>, <code>we</code>, <code>wdata[7:0]</code>; the bus
+returns <code>rdata[7:0]</code> and <code>ready</code>. RAM targets
+answer <code>ready</code> in one cycle (the MEM state already waits one
+cycle). MMIO targets answer combinationally in the same cycle. If a
+future peripheral needs a wait state, it holds <code>ready</code> low
+and the CPU stays in MEM; v1 has no such peripheral, but the FSM must
+implement the wait so the interface is future-proof. Writes to RAM/MMIO
+complete only when <code>ready</code> is seen.</p>
+<h2 id="clock-and-reset">8.4 Clock and reset</h2>
+<p>Single clock <code>clk</code> (Farad-1: 50.000 MHz oscillator on p85
+— <code>CLK_HZ</code> = 50000000 on hardware, any value in simulation).
+Reset: asynchronous assert, synchronous deassert, two-flop synchronizer,
+active low (p87 button is active low with hardware debounce). The demo
+divider from the starter design is <strong>removed</strong>; the CPU
+runs at full clock with no slow-down in v1.</p>
+<hr />
+<h1 id="rtl-module-specifications">9. RTL module specifications</h1>
+<p>Common conventions: Verilog-2001; every module has a synchronous
+reset unless purely combinational; parameters for anything board- or
+capacity-related; one module = one file; no latches (assert in synthesis
+review); registered outputs where a path would otherwise be long.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Module</th>
+<th>Key ports</th>
+<th>Specification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>s8_top</code></td>
+<td>clk, rst_n, mode, uart_rxd, uart_txd, gpio[3:0], cs_n, sck, mosi,
+miso</td>
+<td>Wiring only. Instantiates and connects everything; owns the MODE
+synchronizer and the boot-mode latch. Zero guessed pin numbers (UCF
+only).</td>
+</tr>
+<tr>
+<td><code>s8_cpu</code></td>
+<td>instr[15:0], instr_addr[11:0], bus interface, halt/trap status</td>
+<td>FSM per Section 8; exposes <code>halted</code>, <code>trapped</code>
+for CPU_CONTROL.</td>
+</tr>
+<tr>
+<td><code>s8_alu</code></td>
+<td>op_a, op_b[7:0], funct, carry-in context, result, flags_out</td>
+<td>Combinational; implements Section 6.5 formulas exactly; unit-tested
+exhaustively per operation class against a software model.</td>
+</tr>
+<tr>
+<td><code>s8_regfile</code></td>
+<td>raddr_a, raddr_b, waddr, wdata, we, clk</td>
+<td>8 × 8; sync write; async read; simulation-friendly: expose registers
+to TB via hierarchical reference, not extra ports.</td>
+</tr>
+<tr>
+<td><code>s8_program_ram</code></td>
+<td>cpu_addr, cpu_out (unused in v1), load_addr, load_data, load_we,
+sel_load</td>
+<td>4096 × 16 sync BRAM; read-first; loader port muxed with CPU port;
+assertion: never both enables in one cycle.</td>
+</tr>
+<tr>
+<td><code>s8_data_ram</code></td>
+<td>addr[7:0], re, we, wdata, rdata</td>
+<td>240 × 8 sync RAM, decode excludes 0xF0+ (chip-select input from
+bus).</td>
+</tr>
+<tr>
+<td><code>s8_bus</code></td>
+<td>cpu bus in; RAM chips selects; MMIO read mux</td>
+<td>Address decode per Section 7.2; read mux prioritizes ready sources;
+never routes 0xF0+ to RAM.</td>
+</tr>
+<tr>
+<td><code>s8_gpio</code></td>
+<td>gpio_out, gpio_dir, pad_in, pad_out, pad_oe</td>
+<td>4-bit; synchronizes pad_in (2FF); drives pads per DIR; safe default
+(DIR=0x0F, OUT=0x00 at reset).</td>
+</tr>
+<tr>
+<td><code>baud_gen</code></td>
+<td>clk, tick16 (16× baud tick), parameter CLK_HZ, BAUD</td>
+<td>Phase accumulator (Section 10.1); fully parameterized.</td>
+</tr>
+<tr>
+<td><code>uart_rx</code></td>
+<td>rxd (already synchronized at top), tick16, rdata, valid,
+framing_err, overrun</td>
+<td>Start-bit qualification (half-bit sample must still be low), 8 data
+LSB-first, 1 stop bit; framing error flag on bad stop; overrun when
+pushing a full FIFO (flag latched in <code>uart_regs</code>).</td>
+</tr>
+<tr>
+<td><code>uart_tx</code></td>
+<td>tdata, tvalid, tready, tick16, txd</td>
+<td>8N1, LSB-first; ready/valid handshake; deterministic
+one-byte-per-10-bit-times throughput.</td>
+</tr>
+<tr>
+<td><code>uart_regs</code></td>
+<td>cpu bus side, rx/tx FIFO sides, status</td>
+<td>16-byte RX FIFO, 16-byte TX FIFO (BRAM or distributed per
+utilization review); sticky error bits cleared on UART_DATA read;
+implements port 3 and 4 semantics exactly.</td>
+</tr>
+<tr>
+<td><code>spi_byte_engine</code></td>
+<td>start, tx_byte, rx_byte, done, sck, mosi, miso, cpol/cpha fixed
+0/0</td>
+<td>Shifts 8 bits MSB-first; SCLK = clk divided by 2×DIV (DIV default 4
+→ 6.25 MHz at the Farad-1’s 50 MHz clk — well under the W25Q64BV’s 80
+MHz ceiling); <code>done</code> one cycle; CS owned by the controller,
+not here.</td>
+</tr>
+<tr>
+<td><code>w25q64_controller</code></td>
+<td>op, slot_addr[23:0], len[9:0], data FIFO side, busy, done,
+error[2:0]</td>
+<td>FSM: IDLE → WREN (for writes) → COMMAND+ADDRESS → DATA or POLL_BUSY
+→ STATUS_CHECK/TIMEOUT → DONE/ERROR. Owns CS across the full command.
+Busy-poll timeout 1 s of clk cycles. Page program split at 256 bytes
+happens <em>above</em> this module (loader) — this module refuses len
+&gt; 256 for program and refuses any command whose len would cross a
+page (assertion + ERROR).</td>
+</tr>
+<tr>
+<td><code>s8_boot_ctrl</code></td>
+<td>mode_sync, uart FIFO side, spi controller side, program RAM loader
+port, cpu_reset_hold, boot_status</td>
+<td>Top-level boot FSM (Section 11.2), packet parser (Section 12), image
+validation and copy, metadata commit. The largest control module; keep
+the packet parser as a clearly separated always block or submodule.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="uart-subsystem">10. UART subsystem</h1>
+<h2 id="baud-generation">10.1 Baud generation</h2>
+<p>16× oversampling with a phase accumulator:</p>
+<pre><code>every clk:  acc &lt;= acc + 16*BAUD
+            if acc &gt;= CLK_HZ: acc &lt;= acc - CLK_HZ; tick16 &lt;= 1
+            else tick16 &lt;= 0</code></pre>
+<p>On the Farad-1 (<code>CLK_HZ</code> = 50,000,000, <code>BAUD</code> =
+115200): addend = 16 × 115200 = 1,843,200; <code>tick16</code> fires on
+average every 27.12 clk cycles (the naive integer view — 434.028 clocks
+per bit — never enters the design). The long-term average is exactly
+BAUD, with bounded instantaneous jitter of one clk period.
+<code>CLK_HZ</code> stays a parameter so simulation can use any clock.
+RX and TX share one <code>baud_gen</code> instance only if both use the
+same phase; simpler and preferred: one instance, one <code>tick16</code>
+wire, both consume it.</p>
+<h2 id="framing">10.2 Framing</h2>
+<p>8 data bits, no parity, 1 stop bit; LSB first on the wire. RX:
+two-flop synchronize <code>uart_rxd</code> at the top level (before any
+edge logic); on falling edge, wait 8 ticks (half bit), confirm start
+still low (else return to idle — glitch rejection); sample each data bit
+at mid-bit (16 ticks apart); check stop bit at mid-stop; framing error
+flag if stop ≠ 1 (byte still delivered, flagged). TX: standard
+serializer; <code>tready</code> deasserts while the shift register is
+busy and the one-byte holding register is full.</p>
+<h2 id="fifos-and-errors">10.3 FIFOs and errors</h2>
+<p>RX and TX FIFOs are 16 bytes deep. RX overrun: pushing into a full
+FIFO drops the new byte and latches the overrun sticky bit (UART_STATUS
+bit3). Framing errors latch bit2. Both sticky bits clear when the
+application reads UART_DATA. FIFO full/empty flags feed UART_STATUS bits
+0/1. The bootloader depends on these semantics: it polls RX_VALID,
+drains promptly, and treats sticky error bits as a reason to abort the
+current frame (Section 12.5).</p>
+<hr />
+<h1 id="mode-selection-and-boot-sequence">11. Mode selection and boot
+sequence</h1>
+<h2 id="mode-pin-semantics">11.1 MODE pin semantics</h2>
+<p>MODE is a <strong>boot strap</strong>, not a run-time switch. It is
+sampled through a two-flop synchronizer during reset and latched when
+reset deasserts. Farad-1 note (Section 5, B6): there is no dedicated
+MODE pin — DIP0 (p84) plays the role, raw-high when open;
+<code>s8_top</code> therefore parameterizes <code>MODE_INVERT = 1</code>
+so that the logical polarity below (1 = programming) holds: switch
+closed → programming, switch open → run application (board default).</p>
+<ul>
+<li>Latched MODE = 1 → CPU held in reset; boot controller enters PROG
+(programming) state.</li>
+<li>Latched MODE = 0 → boot controller enters BOOT (application start)
+state.</li>
+</ul>
+<p>During RUN, MODE transitions are ignored until the next hard reset.
+The <code>RUN</code> packet command and CPU_CONTROL.soft_reset perform a
+<strong>warm hand-off</strong>: soft reset re-enters the BOOT flow using
+the <em>latched</em> mode value, so a warm reset on a board strapped to
+MODE=1 returns to the bootloader, and MODE=0 returns to application
+validation. There is no way to enter PROG without a hard reset with MODE
+high — this is deliberate (it prevents a running application from being
+knocked into programming state by a serial glitch).</p>
+<h2 id="boot-flow">11.2 Boot flow</h2>
+<pre><code>POWERON / hard reset
+   │
+   ▼
+INIT: synchronize rst_n, sample+synchronize MODE (≥2 clk settle)
+   │
+   ├─ latched MODE=1 ──► PROG: cpu_reset held; packet loop:
+   │                        HELLO ⇄, BEGIN(erase staging slot),
+   │                        DATA×N (program), VERIFY (readback CRC),
+   │                        COMMIT (metadata), RUN (release CPU)
+   │
+   └─ latched MODE=0 ──► BOOT:
+                            read JEDEC ID (0x9F) → compare family (B8)
+                            read both metadata records
+                            validate (magic, version, slot match, marker,
+                                      length ≤ 8192, CRC16 over image)
+                            pick highest generation valid record
+                            copy image from slot → program RAM
+                            ▲ if no valid image: set BOOT_ERR, fall back to
+                              PROG (a board with no image must still accept uploads)
+                            release cpu_reset → RUN</code></pre>
+<p>RUN state: boot controller idles; CPU_CONTROL writes are honored
+(resume after HALT; soft reset re-enters BOOT). UART remains owned by
+<code>uart_regs</code>; the application polls it as the echo program
+does.</p>
+<h2 id="copy-details">11.3 Copy details</h2>
+<p>The loader reads the chosen slot with op READ (0x03) in chunks of ≤
+512 bytes (two flash pages) into program RAM words, honoring the
+even-byte-high rule of Section 7.1. The copy is verified by the CRC
+computed during the metadata validation read (recompute during copy;
+mismatch → BOOT_ERR=2 and fall back to the other slot, then to
+PROG).</p>
+<hr />
+<h1 id="packet-protocol-v1-byte-exact">12. Packet protocol v1
+(byte-exact)</h1>
+<p>All multi-byte fields are <strong>big-endian</strong>.</p>
+<h2 id="frame-layout">12.1 Frame layout</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Offset</th>
+<th>Field</th>
+<th>Size</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>SYNC0</td>
+<td>1</td>
+<td>0x53 (‘S’)</td>
+</tr>
+<tr>
+<td>1</td>
+<td>SYNC1</td>
+<td>1</td>
+<td>0x38 (‘8’)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>VERSION</td>
+<td>1</td>
+<td>0x01</td>
+</tr>
+<tr>
+<td>3</td>
+<td>COMMAND</td>
+<td>1</td>
+<td>See 12.3</td>
+</tr>
+<tr>
+<td>4</td>
+<td>SEQ</td>
+<td>2</td>
+<td>Monotonic host counter, starts at 1 per session (per BEGIN)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>ADDR</td>
+<td>4</td>
+<td>Command-specific (see 12.3)</td>
+</tr>
+<tr>
+<td>10</td>
+<td>LEN</td>
+<td>2</td>
+<td>Payload length, 0..256</td>
+</tr>
+<tr>
+<td>12</td>
+<td>PAYLOAD</td>
+<td>LEN</td>
+<td>Command data</td>
+</tr>
+<tr>
+<td>12+LEN</td>
+<td>CRC16</td>
+<td>2</td>
+<td>CRC over bytes [2 .. 11+LEN] (VERSION through end of PAYLOAD)</td>
+</tr>
+</tbody>
+</table>
+<p>Maximum frame size: 12 + 256 + 2 = 270 bytes.</p>
+<h2 id="crc16">12.2 CRC16</h2>
+<p>CRC16-CCITT-FALSE: polynomial 0x1021, initial value 0xFFFF, no input
+reflection, no output reflection, no final XOR, MSB-first byte
+processing, result transmitted high byte first. <strong>Check value:
+CRC16(“123456789”) = 0x29B1.</strong> Both the Rust crate and the RTL
+CRC unit must reproduce this check value in tests before any packet work
+starts.</p>
+<h2 id="commands">12.3 Commands</h2>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>CMD</th>
+<th>Name</th>
+<th>ADDR</th>
+<th>LEN / PAYLOAD</th>
+<th>Device action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x01</td>
+<td>HELLO</td>
+<td>0</td>
+<td>0</td>
+<td>Session handshake; ACK payload: [proto_ver, max_payload_hi,
+max_payload_lo, features, mfr_id, dev_id] (6 bytes; mfr/dev from the
+last JEDEC read).</td>
+</tr>
+<tr>
+<td>0x02</td>
+<td>BEGIN</td>
+<td>slot (0=A, 1=B)</td>
+<td>4: image_len (2), image_crc16 (2)</td>
+<td>Validates len (2..8192, even); erases the two sectors of the chosen
+slot; arms staging state.</td>
+</tr>
+<tr>
+<td>0x03</td>
+<td>DATA</td>
+<td>image byte offset</td>
+<td>1..256: raw bytes</td>
+<td>Offset must be a multiple of 256 and offset+len ≤ image_len.
+Programs one flash page.</td>
+</tr>
+<tr>
+<td>0x04</td>
+<td>VERIFY</td>
+<td>0</td>
+<td>0</td>
+<td>Reads back the staged image, computes CRC16, compares with BEGIN’s
+image_crc16. ACK payload on success: [crc_hi, crc_lo].</td>
+</tr>
+<tr>
+<td>0x05</td>
+<td>COMMIT</td>
+<td>0</td>
+<td>0</td>
+<td>Writes the metadata record for the staged slot (Section 13.5),
+marker byte last.</td>
+</tr>
+<tr>
+<td>0x06</td>
+<td>RUN</td>
+<td>0</td>
+<td>0</td>
+<td>Warm hand-off (Section 11.1): releases CPU reset if an image is
+committed; otherwise NAK BAD_STATE.</td>
+</tr>
+<tr>
+<td>0x07</td>
+<td>ABORT</td>
+<td>0</td>
+<td>0</td>
+<td>Discards staging state; no flash changes after this point.</td>
+</tr>
+<tr>
+<td>0x08</td>
+<td>STATUS</td>
+<td>0</td>
+<td>0</td>
+<td>ACK payload: [state, last_error, gen_hi, gen_mid, gen_mid2, gen_lo]
+(6 bytes).</td>
+</tr>
+</tbody>
+</table>
+<h2 id="responses">12.4 Responses</h2>
+<p>Every command receives exactly one response frame, using the same
+framing, with:</p>
+<ul>
+<li>COMMAND = request COMMAND | 0x80,</li>
+<li>SEQ echoed,</li>
+<li>ADDR echoed,</li>
+<li>LEN = 1 (+ command-specific data),</li>
+<li>PAYLOAD[0] = status code; any additional bytes follow (see the
+command table).</li>
+</ul>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Status</th>
+<th>Name</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x00</td>
+<td>OK</td>
+<td>Command accepted and completed</td>
+</tr>
+<tr>
+<td>0x01</td>
+<td>BAD_CRC</td>
+<td>Frame CRC mismatch (frame dropped silently; no ACK is sent — the
+host retries by timeout)</td>
+</tr>
+<tr>
+<td>0x02</td>
+<td>BAD_LEN</td>
+<td>LEN invalid for the command or exceeds the negotiated maximum</td>
+</tr>
+<tr>
+<td>0x03</td>
+<td>BAD_SEQ</td>
+<td>Sequence number out of order (not the duplicate case below)</td>
+</tr>
+<tr>
+<td>0x04</td>
+<td>BAD_OFFSET</td>
+<td>DATA offset unaligned, out of range, or not the expected next
+offset</td>
+</tr>
+<tr>
+<td>0x05</td>
+<td>BAD_STATE</td>
+<td>Command not valid in the current session state (e.g. DATA before
+BEGIN, COMMIT before VERIFY)</td>
+</tr>
+<tr>
+<td>0x06</td>
+<td>FLASH_ERR</td>
+<td>SPI/flash operation failed (timeout, verify mismatch)</td>
+</tr>
+<tr>
+<td>0x07</td>
+<td>NO_IMAGE</td>
+<td>RUN requested but no committed image exists</td>
+</tr>
+<tr>
+<td>0xFF</td>
+<td>UNKNOWN</td>
+<td>Unrecognized command or internal decode failure</td>
+</tr>
+</tbody>
+</table>
+<p>BAD_CRC frames produce <strong>no response</strong> (the device
+cannot trust the frame enough to attribute it); the host discovers this
+by ACK timeout.</p>
+<h2 id="sequencing-duplicates-timeouts">12.5 Sequencing, duplicates,
+timeouts</h2>
+<ul>
+<li>SEQ starts at 1 with each BEGIN and increments by 1 per host frame.
+The device accepts: <code>SEQ == expected</code> (normal) and, for DATA
+only, <code>SEQ == expected − 1</code> with identical ADDR and LEN
+(duplicate retransmission) → ACK OK, payload ignored. Any other SEQ →
+BAD_SEQ.</li>
+<li>DATA offsets must arrive in order: the device tracks
+<code>next_offset</code>; a frame whose ADDR equals
+<code>next_offset</code> advances it; a frame whose ADDR equals the
+previous offset is the duplicate case; anything else is BAD_OFFSET.</li>
+<li>Device inter-byte timeout: 250 ms between bytes of one frame → the
+partial frame is discarded, state unchanged, parser returns to SYNC
+hunt. Staging state (post-BEGIN) persists across frame aborts until
+ABORT or COMMIT or a new BEGIN.</li>
+<li>Host: ACK timeout 2 s, up to 3 retransmissions of the identical
+frame (safe because duplicates are idempotent). Host aborts the session
+on the third consecutive failure.</li>
+<li>Sticky RX error bits (framing/overrun) observed at any point cause
+the device to discard the partial frame and resynchronize.</li>
+<li>Ordering enforced by the device: HELLO may arrive in any state;
+DATA/VERIFY/COMMIT require staging; RUN requires a committed image or an
+already-valid boot image.</li>
+</ul>
+<hr />
+<h1 id="w25q64-spi-flash-subsystem">13. W25Q64 SPI flash subsystem</h1>
+<h2 id="commands-used">13.1 Commands used</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Command</th>
+<th>Opcode</th>
+<th>Protocol</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Read JEDEC ID</td>
+<td>0x9F</td>
+<td>Send 0x9F, read 3 bytes (mfr, type, capacity). Expected for the
+Farad-1’s W25Q64BV: <strong>0xEF 0x40 0x17</strong>; mismatch →
+BOOT_ERR=3.</td>
+</tr>
+<tr>
+<td>Read Status Register-1</td>
+<td>0x05</td>
+<td>Send 0x05, read 1 byte while CS low; bit0 = WIP (busy), bit1 =
+WEL.</td>
+</tr>
+<tr>
+<td>Write Enable</td>
+<td>0x06</td>
+<td>Single opcode; sets WEL. Required before program/erase.</td>
+</tr>
+<tr>
+<td>Read Data</td>
+<td>0x03</td>
+<td>Opcode + 24-bit address + streamed read bytes (any length).</td>
+</tr>
+<tr>
+<td>Page Program</td>
+<td>0x02</td>
+<td>WREN first; opcode + 24-bit address + 1..256 data bytes; bytes wrap
+inside the page if the host overruns — <strong>the controller must never
+emit more than 256 bytes or cross a page boundary</strong> (Section
+9).</td>
+</tr>
+<tr>
+<td>Sector Erase</td>
+<td>0x20</td>
+<td>WREN first; opcode + 24-bit sector address; then poll WIP with
+timeout.</td>
+</tr>
+</tbody>
+</table>
+<p>Timing bounds used by the controller (generous superset of datasheet
+maxima): page program ≤ 3 ms, sector erase ≤ 400 ms, WIP poll timeout 1
+s overall. WP#/HOLD# (if bonded) are tied or driven per B8; the
+controller assumes they are inactive.</p>
+<h2 id="byte-engine-vs-command-controller">13.2 Byte engine vs command
+controller</h2>
+<p>Two modules, as in the original design intent:
+<code>spi_byte_engine</code> does bit-level work only (mode 0: MOSI
+changes on falling SCLK edge, MISO sampled on rising edge, SCLK idle
+low, MSB first, programmable divider). <code>w25q64_controller</code>
+owns CS# for the entire command duration, sequences
+opcodes/addresses/data, performs WREN, polls status, enforces timeouts,
+and reports a 3-bit error code. The byte engine must never raise CS; the
+controller must never shift bits.</p>
+<h2 id="controller-fsm">13.3 Controller FSM</h2>
+<pre><code>IDLE ──op──► [WREN] ──► SEND_OP_ADDR ──► TRANSFER (program/read)
+   ▲                                          │
+   │                                          ▼
+   │                                    WAIT_BUSY (WIP poll, timeout)
+   │                                          │
+   ├── DONE ◄── READBACK_OK (verify step) ◄───┤
+   └── ERROR (timeout / protection / verify) ◄┘</code></pre>
+<p>Erase skips TRANSFER and goes straight to WAIT_BUSY. Program issues
+WREN, sends op+addr+data, then WAIT_BUSY, then (for loader-initiated
+programs) participates in the VERIFY_READBACK step of the boot
+controller.</p>
+<h2 id="storage-layout-farad-1-shared-configuration-flash-relocated-base">13.4
+Storage layout (Farad-1: SHARED configuration flash — relocated
+base)</h2>
+<p>On the Farad-1 the W25Q64BV <strong>is</strong> the FPGA
+configuration flash (Section 5, B7): the bitstream sits at 0x000000
+(~338 KB for the LX9 — measure the generated .bit and confirm). S8
+storage therefore uses a relocated, parameterized layout. The base
+<code>S8_FLASH_BASE</code> defaults to <strong>0x060000</strong> (sector
+192 — ≈48 KiB above a typical LX9 bitstream end) and lives in one shared
+constant set (<code>flash_layout</code> in RTL, mirrored in the Rust
+<code>s8-image</code> crate); scattered absolute addresses are
+forbidden.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Range (default base)</th>
+<th>Size</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x000000–0x05FFFF</td>
+<td>384 KiB</td>
+<td><strong>FPGA configuration region — S8 must never erase or
+program</strong></td>
+</tr>
+<tr>
+<td>0x060000–0x060FFF</td>
+<td>4 KiB</td>
+<td>Metadata record sector <strong>A</strong> (record at offset 0)</td>
+</tr>
+<tr>
+<td>0x061000–0x061FFF</td>
+<td>4 KiB</td>
+<td>Metadata record sector <strong>B</strong> (record at offset 0)</td>
+</tr>
+<tr>
+<td>0x062000–0x063FFF</td>
+<td>8 KiB</td>
+<td>Application slot A</td>
+</tr>
+<tr>
+<td>0x064000–0x065FFF</td>
+<td>8 KiB</td>
+<td>Application slot B</td>
+</tr>
+<tr>
+<td>0x066000–0x7FFFFF</td>
+<td>rest</td>
+<td>Reserved; untouched by v1</td>
+</tr>
+</tbody>
+</table>
+<p>Rules: (1) before Phase 5 leaves simulation, confirm
+<code>BASE ≥ (bitstream bytes rounded up to a 4 KiB sector) + 1 sector</code>
+using the actual .bit file; if a future design grows the bitstream,
+raise BASE — never shrink it. (2) The bootloader, packet protocol (ADDR
+fields stay image-relative — unchanged), and host image packer all
+consume the base from the single constant set. (3) The iMPACT .mcs flow
+writes from address 0; never regenerate an .mcs with a shifted start
+address.</p>
+<p>Rationale for separate metadata sectors: a commit erases only the
+<em>inactive</em> record’s sector, so the other record survives a power
+cut at any point — the redundancy actually works. Slots are 8 KiB =
+program RAM capacity exactly (fixes original issue P2).</p>
+<h2 id="metadata-record-32-bytes-at-offset-0-of-a-metadata-sector">13.5
+Metadata record (32 bytes, at offset 0 of a metadata sector)</h2>
+<table>
+<thead>
+<tr>
+<th>Offset</th>
+<th>Size</th>
+<th>Field</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>4</td>
+<td>Magic “S8MT” = 53 38 4D 54</td>
+</tr>
+<tr>
+<td>4</td>
+<td>1</td>
+<td>Format version = 0x01</td>
+</tr>
+<tr>
+<td>5</td>
+<td>1</td>
+<td>Slot id (0 = A, 1 = B)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>4</td>
+<td>Generation counter, u32 big-endian, monotonically increasing</td>
+</tr>
+<tr>
+<td>10</td>
+<td>2</td>
+<td>Image length in bytes, u16 BE, 2..8192, even</td>
+</tr>
+<tr>
+<td>12</td>
+<td>2</td>
+<td>Image CRC16 (CCITT-FALSE over the image bytes)</td>
+</tr>
+<tr>
+<td>14</td>
+<td>17</td>
+<td>Reserved, must read 0xFF</td>
+</tr>
+<tr>
+<td>31</td>
+<td>1</td>
+<td>Validity marker = 0xA5, <strong>programmed last</strong></td>
+</tr>
+</tbody>
+</table>
+<p>A record is valid iff: magic matches, version matches, slot id
+matches its sector’s associated slot, marker == 0xA5, length in range,
+and the slot image’s CRC16 equals the record’s CRC. Invalid ⇒ treat the
+sector as empty (0xFF or garbage are both rejected by the magic check
+first).</p>
+<h2 id="atomic-update-procedure-device-side-on-commit">13.6 Atomic
+update procedure (device side, on COMMIT)</h2>
+<ol type="1">
+<li>Read back the full staged image; recompute CRC16; compare to the
+staged CRC from BEGIN. Mismatch → FLASH_ERR, staging kept (host may
+retry VERIFY/ABORT).</li>
+<li>Choose the target record sector: the one whose record is
+<em>not</em> the current newest valid record (alternates naturally by
+generation parity).</li>
+<li>Erase the target record sector (0x20 + timeout).</li>
+<li>Program record bytes 0..30 (all but the marker); read back and
+compare.</li>
+<li>Program the marker byte (offset 31); read back and confirm
+0xA5.</li>
+<li>Only now is the new image “committed”. A power cut before step 5
+leaves the old record intact and the new one invalid — boot falls back
+to the previous image (verified by the Phase-6 power-cut test).</li>
+</ol>
+<p>The currently active slot is never erased: BEGIN for slot X requires
+that slot X is not the one the device booted from (NAK BAD_STATE
+otherwise). Alternating A/B across updates guarantees the previous image
+is still present when the new one is committed.</p>
+<h2 id="boot-time-validation-recap-of-the-algorithm">13.7 Boot-time
+validation (recap of the algorithm)</h2>
+<p>Read both records; filter to valid ones; pick the highest generation;
+verify its image CRC during (or after) the copy to program RAM; on
+copy-time mismatch, fall back to the other valid record; if none,
+BOOT_ERR=1 and fall back to PROG. Generation comparison is unsigned u32;
+wrap-around is accepted as a non-issue (centuries at human update
+rates).</p>
+<hr />
+<h1 id="rust-host-toolchain">14. Rust host toolchain</h1>
+<h2 id="workspace">14.1 Workspace</h2>
+<p><code>host/s8/</code> is a Cargo workspace: <code>s8-isa</code>,
+<code>s8-assembler</code>, <code>s8-image</code>,
+<code>s8-serial</code>, <code>s8-disasm</code>, <code>s8-cli</code>.
+Dependencies kept minimal: <code>clap</code> (CLI),
+<code>serialport</code> (host serial), <code>thiserror</code> (errors),
+and an in-repo CRC16 implementation in <code>s8-image</code> (do
+<strong>not</strong> pull a generic crc crate — the parameters are part
+of the protocol spec and must be visible in-tree, pinned by the 0x29B1
+test).</p>
+<h2 id="s8-isa">14.2 <code>s8-isa</code></h2>
+<p>The single source of truth for encodings.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">enum</span> Instruction <span class="op">{</span> Ldi <span class="op">{</span> rd<span class="op">:</span> <span class="dt">u8</span><span class="op">,</span> imm<span class="op">:</span> <span class="dt">u8</span> <span class="op">},</span> <span class="bu">Add</span> <span class="op">{</span> rd<span class="op">:</span> <span class="dt">u8</span><span class="op">,</span> rs<span class="op">:</span> <span class="dt">u8</span> <span class="op">},</span> <span class="co">/* ...all 20-ish variants... */</span> <span class="op">}</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> encode(i<span class="op">:</span> <span class="op">&amp;</span>Instruction) <span class="op">-&gt;</span> <span class="dt">u16</span><span class="op">;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> decode(w<span class="op">:</span> <span class="dt">u16</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>Instruction<span class="op">,</span> DecodeError<span class="op">&gt;;</span> <span class="co">// errors on any illegal pattern per 6.2</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> encode_str(s<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">u16</span><span class="op">,</span> AsmError<span class="op">&gt;;</span>       <span class="co">// test helper: &quot;LDI R0, 1&quot; -&gt; 0x1001</span></span></code></pre></div>
+<p>Tests: the full golden-vector table of Section 6.7 (generated file
+included via <code>include_str!</code>), plus encode→decode→encode round
+trips over all legal encodings (exhaustive over the legal subspace),
+plus rejection tests for every illegal pattern class.</p>
+<h2 id="s8-assembler">14.3 <code>s8-assembler</code></h2>
+<p>Two-pass, per Section 6.8. Pass 1 assigns word addresses and collects
+labels/.equ constants; pass 2 parses operands, validates ranges, applies
+relaxation, encodes via <code>s8-isa</code>. Output: flat binary
+(big-endian word packing), optional Intel HEX, and an optional listing
+file (address, word, source line). Mandatory diagnostics with
+file:line:col. Tests: forward references, duplicate/undefined labels,
+range violations for each immediate format, branch relaxation both
+directions, <code>.org</code> overlap, <code>.byte</code> packing order,
+image-size limit (8192), and every example program in Section 6.9
+assembling to its normative word list.</p>
+<h2 id="s8-image">14.4 <code>s8-image</code></h2>
+<p><code>.s8img</code> container, 12-byte header + payload:</p>
+<table>
+<thead>
+<tr>
+<th>Offset</th>
+<th>Size</th>
+<th>Field</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>4</td>
+<td>Magic “S8IM” = 53 38 49 4D</td>
+</tr>
+<tr>
+<td>4</td>
+<td>1</td>
+<td>Format version = 0x01</td>
+</tr>
+<tr>
+<td>5</td>
+<td>1</td>
+<td>Flags (bit0: payload is a raw binary; others reserved 0)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>1</td>
+<td>Preferred slot (0=A, 1=B, 0xFF=unspecified)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>1</td>
+<td>Reserved = 0</td>
+</tr>
+<tr>
+<td>8</td>
+<td>2</td>
+<td>Payload length, u16 BE (2..8192, even)</td>
+</tr>
+<tr>
+<td>10</td>
+<td>2</td>
+<td>Payload CRC16 (CCITT-FALSE)</td>
+</tr>
+<tr>
+<td>12</td>
+<td>N</td>
+<td>Payload (program bytes, even-byte-high word packing)</td>
+</tr>
+</tbody>
+</table>
+<p><code>pack(bin, slot) -&gt; S8img</code> /
+<code>unpack(s8img) -&gt; (bin, slot)</code> with full validation.
+Tests: pack/unpack round trip, CRC corruption detection, length-limit
+rejection.</p>
+<h2 id="s8-serial">14.5 <code>s8-serial</code></h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">trait</span> Transport <span class="op">{</span> <span class="kw">fn</span> write(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span> buf<span class="op">:</span> <span class="op">&amp;</span>[<span class="dt">u8</span>]) <span class="op">-&gt;</span> <span class="pp">io::</span><span class="dt">Result</span><span class="op">&lt;</span>()<span class="op">&gt;;</span> <span class="kw">fn</span> read_timeout(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span> buf<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> [<span class="dt">u8</span>]<span class="op">,</span> ms<span class="op">:</span> <span class="dt">u32</span>) <span class="op">-&gt;</span> <span class="pp">io::</span><span class="dt">Result</span><span class="op">&lt;</span><span class="dt">usize</span><span class="op">&gt;;</span> <span class="op">}</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> PortTransport <span class="op">{</span> <span class="co">/* wraps serialport::SerialPort */</span> <span class="op">}</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> MockTransport <span class="op">{</span> <span class="co">/* scripted request/response pairs for tests */</span> <span class="op">}</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> Client<span class="op">&lt;</span>T<span class="op">:</span> Transport<span class="op">&gt;</span> <span class="op">{</span> <span class="co">/* packet codec + session FSM */</span> <span class="op">}</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span><span class="op">&lt;</span>T<span class="op">:</span> Transport<span class="op">&gt;</span> Client<span class="op">&lt;</span>T<span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> hello(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>Hello<span class="op">,</span> ProtoError<span class="op">&gt;;</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> upload(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span> img<span class="op">:</span> <span class="op">&amp;</span>S8img<span class="op">,</span> slot<span class="op">:</span> Slot<span class="op">,</span> progress<span class="op">:</span> <span class="kw">impl</span> <span class="bu">FnMut</span>(<span class="dt">usize</span><span class="op">,</span> <span class="dt">usize</span>)) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>()<span class="op">,</span> ProtoError<span class="op">&gt;;</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> verify(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">u16</span><span class="op">,</span> ProtoError<span class="op">&gt;;</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> commit(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>()<span class="op">,</span> ProtoError<span class="op">&gt;;</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> run(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>()<span class="op">,</span> ProtoError<span class="op">&gt;;</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> status(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>Status<span class="op">,</span> ProtoError<span class="op">&gt;;</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Implements Section 12 exactly: CRC, big-endian fields, SEQ
+management, duplicate-idempotent DATA retries (3 × 2 s), BAD_* handling
+with distinct user-facing errors. The serial crate is isolated behind
+<code>Transport</code> so the protocol logic is fully unit-tested with
+<code>MockTransport</code> — no hardware, no timing flakiness. Tests:
+golden frame bytes for HELLO/BEGIN/DATA(1 page)/VERIFY/COMMIT/RUN
+(hand-computed vectors included in the spec repo), timeout/retry paths,
+BAD_CRC silent-drop path, duplicate-DATA idempotency, BAD_OFFSET on a
+skipped page.</p>
+<h2 id="s8-disasm">14.6 <code>s8-disasm</code></h2>
+<p><code>decode</code>-driven; annotates labels when given the symbol
+map; used by <code>s8 disasm</code> and in round-trip tests (assemble →
+disassemble → reassemble → identical bytes) over all example
+programs.</p>
+<h2 id="s8-cli">14.7 <code>s8-cli</code></h2>
+<pre><code>s8 asm examples/gpio.s8 -o build/gpio.bin [--listing build/gpio.lst] [--hex]
+s8 disasm build/gpio.bin
+s8 image build/gpio.bin --slot A -o build/gpio.s8img
+s8 upload build/gpio.s8img --port COM5 --baud 115200      # port auto-scan allowed if --port omitted
+s8 verify --port COM5
+s8 status --port COM5
+s8 monitor --port COM5 --baud 115200                      # raw terminal, local echo off, hex dump option</code></pre>
+<p>Port names: never hard-code COM5 or /dev/ttyUSB0; enumerate
+candidates with <code>serialport::available_ports()</code> and require
+confirmation when ambiguous. <code>cargo test</code> must pass with no
+hardware attached (all serial tests use MockTransport).</p>
+<hr />
+<h1 id="xilinx-ise-workflow">15. Xilinx ISE workflow</h1>
+<p>ISE 14.7 is the final release supporting Spartan-6; Vivado does not.
+Practical notes: the Windows installer ships both 32-bit and 64-bit
+variants (use the 32-bit toolchain on modern Windows if the 64-bit GUI
+misbehaves, or run in a Windows 7/10 VM or under Linux Wine); iSIM and
+the command-line flows (<code>xst</code>, <code>ngdbuild</code>,
+<code>map</code>, <code>par</code>, <code>trce</code>,
+<code>bitgen</code>) are scriptable and preferred for CI-like
+reproducibility over the GUI.</p>
+<p>Sequence:</p>
+<ol type="1">
+<li>Create project with the <strong>exact</strong> full part string (B1)
+— including speed grade and package.</li>
+<li>Add RTL to the synthesis source set; testbenches only to the
+simulation source set.</li>
+<li>Set <code>s8_top</code> as synthesis top; run behavioral simulation
+of every testbench in Section 16.1 <strong>before</strong>
+synthesis.</li>
+<li>Synthesis: verify inferred BRAM for <code>s8_program_ram</code>
+(must be BRAM, not distributed) and check utilization reports against
+the budget (Section 16.5).</li>
+<li>Constraints: start from the Farad-1 UCF below — every LOC verified
+against the schematic renders (Section 5.2). The vendor example UCF
+(<code>BoardFiles/Farad1_UCF.ucf</code>) is correct on its LOCs
+(including <code>Serial_Tx = p41</code> / <code>Serial_Rx = p40</code>)
+but incomplete: it has <strong>no IOSTANDARD anywhere, no PERIOD
+constraint, and none of the flash pins</strong>. All three gaps are
+fixed here:</li>
+</ol>
+<pre><code># S8 v1 constraints — Farad-1 (xc6slx9-2tqg144), verified against schematic rev 2016-12-29
+NET &quot;clk&quot;        LOC = &quot;P85&quot; | IOSTANDARD = LVCMOS33;  TNM_NET = sys_clk;
+TIMESPEC &quot;TS_sys_clk&quot; = PERIOD &quot;sys_clk&quot; 20.000 ns HIGH 50%;   # 50.000 MHz oscillator
+NET &quot;rst_n&quot;      LOC = &quot;P87&quot; | IOSTANDARD = LVCMOS33;  # nFP_RST button, active low, RC-debounced
+NET &quot;mode&quot;       LOC = &quot;P84&quot; | IOSTANDARD = LVCMOS33;  # DIP0; open=1, closed=0; MODE_INVERT=1 in s8_top
+NET &quot;gpio&lt;0&gt;&quot;    LOC = &quot;P105&quot; | IOSTANDARD = LVCMOS33; # LED0, active high
+NET &quot;gpio&lt;1&gt;&quot;    LOC = &quot;P104&quot; | IOSTANDARD = LVCMOS33; # LED1, active high
+NET &quot;gpio&lt;2&gt;&quot;    LOC = &quot;P102&quot; | IOSTANDARD = LVCMOS33; # LED2, active high
+NET &quot;gpio&lt;3&gt;&quot;    LOC = &quot;P101&quot; | IOSTANDARD = LVCMOS33; # LED3, active high
+NET &quot;uart_rxd&quot;   LOC = &quot;P83&quot; | IOSTANDARD = LVCMOS33;  # FT2232H Ch.B TXD (after FT_PROG -&gt; UART)
+NET &quot;uart_txd&quot;   LOC = &quot;P82&quot; | IOSTANDARD = LVCMOS33;  # FT2232H Ch.B RXD
+# DB9/MAX232 fallback: uart_rxd = P40, uart_txd = P41 (swap LOCs only)
+NET &quot;spi_sck&quot;    LOC = &quot;P70&quot; | IOSTANDARD = LVCMOS33;  # flash CK (CCLK pin, net FP_PR_CLK)
+NET &quot;spi_cs_n&quot;   LOC = &quot;P38&quot; | IOSTANDARD = LVCMOS33;  # flash CS# (CSO_B; board pull-up R6)
+NET &quot;spi_mosi&quot;   LOC = &quot;P64&quot; | IOSTANDARD = LVCMOS33;  # flash DI (net MISO0)
+NET &quot;spi_miso&quot;   LOC = &quot;P65&quot; | IOSTANDARD = LVCMOS33;  # flash DO (net MISO1)
+NET &quot;spi_wp_n&quot;   LOC = &quot;P62&quot; | IOSTANDARD = LVCMOS33;  # flash WP# - drive high, no board pull-up
+NET &quot;spi_hold_n&quot; LOC = &quot;P61&quot; | IOSTANDARD = LVCMOS33;  # flash HOLD# - drive high, no board pull-up</code></pre>
+<ol start="6" type="1">
+<li>Implementation + timing: all paths must meet the PERIOD constraint
+with margin; investigate every timing summary line before generating a
+bitstream.</li>
+<li>Bitstream via iMPACT/JTAG; keep a known-good recovery bitstream in
+<code>build/</code> with its hash recorded.</li>
+<li>Reproducibility record per bitstream: ISE version, git revision, UCF
+content, timing summary, utilization summary, bitstream SHA-256.</li>
+</ol>
+<p>UG380 (Spartan-6 Configuration User Guide) is required reading: the
+Farad-1’s W25Q64BV is the configuration flash (Section 5, B7) and S8
+accesses it as ordinary user I/O after configuration completes —
+CCLK/CSO_B/MISO0-style pins become fabric-driven SPI signals per the UCF
+above.</p>
+<hr />
+<h1 id="verification-plan">16. Verification plan</h1>
+<h2 id="rtl-testbenches">16.1 RTL testbenches</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Testbench</th>
+<th>Covers</th>
+<th>Key checks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tb_s8_alu</code></td>
+<td><code>s8_alu</code></td>
+<td>Every operation class against a behavioral model; exhaustive operand
+sweep for ADD/SUB (all 65536 pairs) verifying flags per Section 6.5
+formulas; directed cases for each O/C corner (0x7F+1, 0x80−1, 0xFF+1,
+equal operands, etc.).</td>
+</tr>
+<tr>
+<td><code>tb_s8_regfile</code></td>
+<td><code>s8_regfile</code></td>
+<td>Write/read ports, sync-write timing, no read-during-write
+hazard.</td>
+</tr>
+<tr>
+<td><code>tb_s8_cpu_programs</code></td>
+<td>CPU + program RAM</td>
+<td>Loads normative programs from <code>tb/vectors/</code> (generated
+from <code>s8-isa</code>): GPIO words execute and drive the port value;
+UART echo program run against a UART BFM that injects bytes and checks
+echoes; golden vector sweep: one instruction per encoding, architectural
+state checked after each; HALT/resume; TRAP on opcode 0xE and on
+non-zero reserved bits; stack fault TRAP.</td>
+</tr>
+<tr>
+<td><code>tb_uart_loopback</code></td>
+<td>rx + tx + regs + baud_gen</td>
+<td>Tie txd→rxd; stream 256 random bytes with random gaps; check data
+integrity, FIFO full behavior, sticky overrun/framing bits, framing
+error on a corrupted stop bit, tolerance to ±2% injected baud
+offset.</td>
+</tr>
+<tr>
+<td><code>tb_spi_byte_engine</code></td>
+<td><code>spi_byte_engine</code></td>
+<td>Mode-0 timing against a bit-accurate reference; MOSI/MISO ordering;
+divider correctness for DIV ∈ {2,4,8}.</td>
+</tr>
+<tr>
+<td><code>tb_w25q64_model</code></td>
+<td>behavioral flash model</td>
+<td>The model itself: JEDEC ID read, WEL/WIP behavior, page wrap
+protection, sector erase, busy timing, and its own fault-injection
+hooks.</td>
+</tr>
+<tr>
+<td><code>tb_boot_packets</code></td>
+<td>packet parser + CRC + session FSM</td>
+<td>Golden CRC (0x29B1 check vector first); golden frame bytes from
+Section 14.5’s test vectors; fuzz/negative: bad sync, bad CRC, bad LEN,
+bad SEQ, duplicate DATA (idempotent), skipped page (BAD_OFFSET),
+commands out of order (BAD_STATE), truncated frames (timeout recovery),
+oversize LEN.</td>
+</tr>
+<tr>
+<td><code>tb_full_boot</code></td>
+<td>entire boot path</td>
+<td>MODE=1: full upload session against <code>tb_w25q64_model</code>,
+COMMIT, RUN, then MODE=0 cold boot: image copied to program RAM, CPU
+executes it and emits the expected UART bytes; power-cut injection at
+each COMMIT step → previous image still boots; slot-selection: newer
+generation wins; corrupted image → fallback.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="behavioral-w25q64-model-tb_w25q64_model.v">16.2 Behavioral
+W25Q64 model (<code>tb_w25q64_model.v</code>)</h2>
+<p>A Verilog model with an 8 MiB array (or 64 KiB sparse window — the
+layout only needs 0x0000–0x5FFF plus wrap tests — choose sparse to keep
+sim fast, but keep addresses honest). Behaviors: JEDEC ID bytes
+(parameterized, default a Winbond ID), WEL/WIP status semantics,
+page-program bit-clear-only semantics (programming over non-errored bits
+must be modeled as the real device behaves: AND semantics), sector erase
+timing (parameterized fast for sim), busy delay parameters, and fault
+hooks (drop N CS edges, delay busy N cycles, corrupt byte at address X)
+driven by plusargs.</p>
+<h2 id="host-side-tests">16.3 Host-side tests</h2>
+<p>All <code>cargo test</code> suites run offline: golden vectors,
+assembler diagnostics, image pack/unpack, protocol sessions over
+MockTransport, retry/timeout logic with simulated clock via injectable
+sleep. A <code>--locked</code> build must be reproducible.</p>
+<h2 id="hardware-acceptance-tests-per-phase">16.4 Hardware acceptance
+tests (per phase)</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Test</th>
+<th>Pass</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>GPIO program on board</td>
+<td>LED0 (p105) lights and holds the programmed level:
+<code>LDI R0,1</code> + <code>OUT GPIO_OUT,R0</code> turns it on (active
+high); scope confirms static level after the loop</td>
+</tr>
+<tr>
+<td>3</td>
+<td>UART loopback</td>
+<td>Board echoes PC bytes at 115200 for ≥ 10 min with zero losses at the
+offered rate</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Framing stress</td>
+<td>Host sends 0x00, 0xFF, 0x55, 0xAA patterns; echo integrity
+maintained</td>
+</tr>
+<tr>
+<td>5</td>
+<td>JEDEC ID</td>
+<td><code>s8 status</code> (or UART console command in the boot
+controller) reports the expected family ID</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Full upload</td>
+<td><code>s8 upload</code> + <code>s8 verify</code> + power-cycle with
+MODE=0 → application runs from flash</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Power-cut sweep</td>
+<td>Cut power during COMMIT at ≥ 5 randomized delays; board always boots
+either the old or the new image, never a bricked state</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Slot alternation</td>
+<td>Two successive uploads land in A then B; generation increments
+monotonically</td>
+</tr>
+</tbody>
+</table>
+<h2 id="budgets-and-traceability">16.5 Budgets and traceability</h2>
+<p>Budgets (XC6SLX9: 1,430 slices, 32 BRAM18 blocks, 90 Kb distributed
+RAM — Section 5.4): program RAM = 4 BRAM18; UART FIFOs + data RAM =
+distributed RAM (0 BRAM); total slice utilization target ≤ 60 % (~860
+slices) at the end of Phase 6 (margin for the compiler/debugger
+phases).</p>
+<p>Every numbered requirement in this document maps to at least one
+testbench or acceptance test; the mapping table is maintained in
+<code>docs/verification-plan.md</code> with columns (requirement tag,
+section, test ID, status). Requirement tags are assigned per section
+(e.g. S8-12.5-03 = Section 12.5, third bullet).</p>
+<hr />
+<h1 id="safety-reliability-and-failure-handling">17. Safety,
+reliability, and failure handling</h1>
+<p>Consolidated hard rules (each is testable; several are already in the
+phase gates):</p>
+<ol type="1">
+<li>Pin assignments come from the schematic only; every top-level port
+gets LOC + IOSTANDARD; no placeholder survives into implementation.</li>
+<li>3.3 V logic levels only on user I/O; never RS-232 voltages; never 5
+V unless the bank spec explicitly allows it.</li>
+<li>CPU and bootloader ownership are mutually exclusive: CPU reset is
+held for the entire PROG state.</li>
+<li>Every length, address, loop, and wait is bounded; the assembler
+rejects images &gt; 8192 bytes; the device rejects LEN &gt; 256 and
+offsets ≥ image_len.</li>
+<li>The active slot is never erased; the metadata marker is written
+last; both metadata records live in separate erase sectors.</li>
+<li>Flash BUSY is always polled with a timeout; WEL is checked;
+programmed data is read back.</li>
+<li>The FPGA configuration region is untouchable — the flash IS shared
+on the Farad-1 (B7); layout constants live in one place
+(<code>S8_FLASH_BASE</code>, Section 13.4).</li>
+<li>JTAG reconfiguration with a known-good recovery bitstream is always
+possible (never lock configuration pins as user I/O in the
+constraints).</li>
+<li>All asynchronous inputs pass two-flop synchronizers (MODE, rst_n,
+uart_rxd, miso sampled by the divider — synchronous to sck by
+construction).</li>
+<li>CRC detects corruption; it is not authentication. Document this
+wherever uploads are described.</li>
+<li>Farad-1 flash pins WP# (p62) and HOLD# (p61) have <strong>no board
+pull-ups</strong>: the boot controller drives both HIGH from
+configuration release onward, before any flash command. A floating HOLD#
+can stall the SPI bus.</li>
+<li>The DB9/MAX232 path is electrically safe as designed (5 V
+translator, but the FPGA-side RX passes through a 5.6 K/10 K divider ≈
+3.2 V max, input-only). Never bypass the divider; never treat the DB9
+pins as logic-level.</li>
+</ol>
+<hr />
+<h1 id="phased-execution-plan">18. Phased execution plan</h1>
+<p>Each phase has a deliverable and a hard exit gate. Do not start the
+next phase until the gate is demonstrated, ideally by an automated
+test.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Deliverable</th>
+<th>Exit gate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0. Foundation</td>
+<td>This spec frozen in <code>docs/</code>; board facts B1–B9 verified
+or explicitly deferred; vector generator running</td>
+<td>Golden vectors reproduce in both Node generator and Rust tests; UCF
+skeleton exists with placeholders still unfilled</td>
+</tr>
+<tr>
+<td>1. CPU core</td>
+<td><code>s8_alu</code>, <code>s8_regfile</code>, <code>s8_cpu</code>,
+<code>s8_program_ram</code>, <code>s8_data_ram</code>,
+<code>s8_bus</code> + testbenches</td>
+<td><code>tb_s8_alu</code>, <code>tb_s8_regfile</code>,
+<code>tb_s8_cpu_programs</code> pass; golden vector sweep green;
+HALT/TRAP/stack-fault cases green</td>
+</tr>
+<tr>
+<td>2. First hardware</td>
+<td><code>s8_top</code> minimal (CPU + GPIO), Farad-1 UCF from Section
+15, ISE project runs clean</td>
+<td>GPIO demo (Section 6.9.1) observed on LED0 (p105, active high);
+timing closure with margin; utilization recorded</td>
+</tr>
+<tr>
+<td>3. UART</td>
+<td><code>baud_gen</code>, <code>uart_rx</code>, <code>uart_tx</code>,
+<code>uart_regs</code>, echo program</td>
+<td><code>tb_uart_loopback</code> green; on-board echo survives the
+10-minute stress test</td>
+</tr>
+<tr>
+<td>4. Boot protocol</td>
+<td><code>s8_boot_ctrl</code> packet parser + session FSM; host
+<code>s8-serial</code> + <code>s8-cli</code> upload/verify commands</td>
+<td><code>tb_boot_packets</code> green (including fuzz/negative); a full
+host↔︎RTL upload session runs against the flash model in simulation</td>
+</tr>
+<tr>
+<td>5. SPI discovery</td>
+<td><code>spi_byte_engine</code>, <code>w25q64_controller</code>, JEDEC
+read path wired into the boot controller</td>
+<td><code>tb_spi_byte_engine</code> and model tests green; on-board
+JEDEC read returns <strong>0xEF 0x40 0x17</strong> (if not: continuity
+check + p64/p65 swap per Section 5.3)</td>
+</tr>
+<tr>
+<td>6. Persistent slots</td>
+<td>Full loader, metadata commit, A/B selection,
+<code>s8 image</code>/<code>s8 upload</code> end-to-end</td>
+<td><code>tb_full_boot</code> green incl. power-cut injection; hardware
+acceptance table (16.4) passes; two alternating uploads verified on
+hardware</td>
+</tr>
+<tr>
+<td>7. Compiler</td>
+<td>C-like frontend per Section 19</td>
+<td>Compiled programs match assembler-level equivalents in simulation;
+ABI conformance tests pass</td>
+</tr>
+<tr>
+<td>8. Debugger</td>
+<td><code>s8 disasm</code> symbols, monitor improvements, status/break
+support</td>
+<td>Repeatable debug workflow demonstrated: upload → run → observe →
+diagnose from symbols</td>
+</tr>
+</tbody>
+</table>
+<p>Phase ordering rationale: simulation-heavy phases (1, 4) proceed
+without board facts; hardware risk is retired early (Phase 2 proves the
+toolchain, constraints, and board interface before any protocol work);
+flash risk lands late, once the recovery path (JTAG + known-good
+bitstream) is already proven.</p>
+<hr />
+<h1 id="future-work-specified-not-scheduled">19. Future work (specified,
+not scheduled)</h1>
+<h2 id="compiler-phase-7">19.1 Compiler (Phase 7)</h2>
+<p>Pipeline: source → lexer → parser/AST → semantic analysis (u8, bool,
+void; no dynamic allocation) → IR → optional constant folding / DCE →
+instruction selection (S8 ISA v1) → register allocation → branch
+relaxation → <code>s8-isa</code> encoding → <code>.s8img</code> →
+existing uploader. Statements: declarations, assignment, if/else, while,
+functions, return. Built-ins only when backed by real runtime/hardware:
+<code>gpio_read</code>, <code>gpio_write</code>,
+<code>uart_available</code>, <code>uart_read</code>,
+<code>uart_write</code>, <code>delay</code>. Debug info: JSON symbol map
+(source line ↔︎ word address) feeding <code>s8 disasm</code>.</p>
+<h2 id="instruction-fetch-from-external-flash">19.2 Instruction-fetch
+from external flash</h2>
+<p>If images must exceed 8 KiB: an XIP fetch interface over the SPI
+controller with a simple direct-mapped instruction cache is the
+specified direction. Explicitly deferred; BRAM copy remains the v1
+mechanism.</p>
+<h2 id="abi-proposal-freeze-when-the-compiler-starts">19.3 ABI proposal
+(freeze when the compiler starts)</h2>
+<p>R0 = return value and scratch; R1–R2 = arguments; R3–R5 =
+caller-saved temporaries; R6–R7 = callee-saved; SP grows down from 0xEF;
+16-entry hardware stack implies a software spill strategy for deep call
+chains (compiler must either prove depth ≤ 16 or spill to 0x00–0xDF);
+prologue = PUSH callee-saved, epilogue = POP in reverse.</p>
+<hr />
+<h1 id="references">20. References</h1>
+<ul>
+<li>UG380 — Spartan-6 FPGA Configuration User Guide. Configuration
+modes, SPI flash wiring, user-mode access rules. Required: the Farad-1’s
+W25Q64BV IS the configuration flash (B7); S8 accesses it as user I/O
+after configuration. https://docs.amd.com/v/u/en-US/ug380</li>
+<li>UG382 — Spartan-6 FPGA Memory Resources User Guide. BRAM primitives,
+port configurations, inference rules for
+<code>s8_program_ram</code>/<code>s8_data_ram</code>.</li>
+<li>UG612 — ISE Synthesis and Simulation Design Guide; UG621 — ISim
+simulation guide (command-line flows preferred).</li>
+<li>Xilinx ISE Design Suite 14.7 (final Spartan-6 release):
+https://www.xilinx.com/products/design-tools/ise-design-suite.html</li>
+<li>Spartan-6 package pinout files:
+https://www.xilinx.com/support/package-pinout-files/spartan-6-pkgs.html
+(board routing and bank voltages still require the schematic).</li>
+<li>Winbond W25Q64 family datasheet (use the exact suffix):
+https://www.winbond.com/hq/product/code-storage-flash-memory/serial-nor-flash/?__locale=en</li>
+<li>CRC16-CCITT-FALSE parameters and check value 0x29B1 (canonical
+catalogue value; reproduced in-tree by <code>s8-image</code>’s CRC unit
+test).</li>
+<li>Farad-1 board documentation (in-repo):
+<code>BoardFiles/Farad-1-Schematic.pdf</code> (6 sheets, rev
+2016-12-29), <code>BoardFiles/Farad-1-User-Manual.pdf</code>,
+<code>BoardFiles/Farad1_UCF.ucf</code> (vendor example: LOCs correct,
+missing IOSTANDARD/PERIOD constraints — build from Section 15
+instead).</li>
+</ul>
+<hr />
+<h1 id="appendix-a-guide-for-an-implementing-agent">Appendix A — Guide
+for an implementing agent</h1>
+<ol type="1">
+<li>Start at Phase 0/1: create the repo tree (Section 3), copy the
+frozen tables (Sections 6, 12, 13.5) into <code>docs/</code>, and run
+<code>tools/gen_isa_vectors.js</code> to populate
+<code>tb/vectors/</code> and the Rust golden-vector include file.</li>
+<li>Build <code>s8-isa</code> first and make its tests pass; everything
+else depends on it.</li>
+<li>Build <code>s8_alu</code> + <code>tb_s8_alu</code> next; the
+exhaustive flag sweep catches formula misunderstandings before they
+spread into the CPU.</li>
+<li>When writing the CPU FSM, keep the state list of Section 8.2
+verbatim; add states only with a written justification in the module
+header.</li>
+<li>The two most bug-prone seams in the whole design are (a) the byte
+order between image bytes and 16-bit words (even byte = high byte — one
+helper function, used everywhere, no ad-hoc swapping) and (b) the DATA
+packet offset/page-boundary rules (256-aligned offsets, device rejects
+everything else). Test both seams directly, not just through the happy
+path.</li>
+<li>Never “fix” a failing golden vector by editing the vector. The
+vector is the spec; the code is suspect.</li>
+<li>Board facts for the Farad-1 are already verified and recorded in
+Section 5 (evidence: schematic page renders inspected visually, page by
+page). On first bring-up, perform the Section 5.3 checks — FT_PROG
+EEPROM backup then Channel B → UART; flash-pin JEDEC confirmation;
+record the results in <code>docs/board-bringup.md</code>. The vendor UCF
+ships without IOSTANDARD/PERIOD constraints: always build from the
+Section 15 UCF.</li>
+</ol>
+<p><em>End of specification.</em></p>
+</body>
+</html>
