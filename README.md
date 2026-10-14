@@ -1,8 +1,8 @@
-# S8 — 8-bit soft processor for Spartan-6 LX9
+# TinyCpu 8bit Computer — This is 8-bit soft processor for Spartan-6 LX9
 
 ![TinyCpu Technical Banner](https://github.com/Amin98Hosseini/TinyCpu-8bit-Computer-/blob/main/Docs/TinyCpu-technical-banner.png?raw=true)
 
-S8 is a small, custom 8-bit soft processor for learning and experimentation on a
+TinyCpu 8bit Computer is a small, custom 8-bit soft processor for learning and experimentation on a
 Xilinx Spartan-6 FPGA. The FPGA holds the CPU, instruction/data storage, GPIO,
 UART, an SPI flash controller, and boot control. A PC-side Rust toolchain
 assembles source code into an image and transfers it to the board over USB-UART.
