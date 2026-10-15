@@ -1,6 +1,6 @@
 # TinyCpu 8bit Computer — This is 8-bit soft processor for Spartan-6 LX9
 
-![TinyCpu Technical Banner](https://github.com/Amin98Hosseini/TinyCpu-8bit-Computer-/blob/main/Docs/TinyCpu-technical-banner.png?raw=true)
+![TinyCpu Technical Banner](https://github.com/Amin98Hosseini/TinyCpu-8bit-Computer-/blob/main/Docs/TinyCpu_%20Neon%208-Bit%20FPGA%20Showcase.png?raw=true)
 
 TinyCpu 8bit Computer is a small, custom 8-bit soft processor for learning and experimentation on a
 Xilinx Spartan-6 FPGA. The FPGA holds the CPU, instruction/data storage, GPIO,
