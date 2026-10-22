@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="C:/Users/vboxuser/Documents/ThinyCpu/Thiny_Alu/tb_s8_alu_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="tb_s8_alu" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="20" />
+   <wvobject fp_name="/tb_s8_alu/result" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">result[7:0]</obj_property>
+      <obj_property name="ObjectShortName">result[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_s8_alu/fz" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">fz</obj_property>
+      <obj_property name="ObjectShortName">fz</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_s8_alu/fc" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">fc</obj_property>
+      <obj_property name="ObjectShortName">fc</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_s8_alu/fn" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">fn</obj_property>
+      <obj_property name="ObjectShortName">fn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_s8_alu/fo" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">fo</obj_property>
+      <obj_property name="ObjectShortName">fo</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_s8_alu/a" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">a[7:0]</obj_property>
+      <obj_property name="ObjectShortName">a[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_s8_alu/b" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">b[7:0]</obj_property>
+      <obj_property name="ObjectShortName">b[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_s8_alu/op" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">op[3:0]</obj_property>
+      <obj_property name="ObjectShortName">op[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_s8_alu/i" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">i[31:0]</obj_property>
+      <obj_property name="ObjectShortName">i[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_s8_alu/j" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">j[31:0]</obj_property>
+      <obj_property name="ObjectShortName">j[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_s8_alu/k" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">k[31:0]</obj_property>
+      <obj_property name="ObjectShortName">k[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_s8_alu/checks" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">checks[31:0]</obj_property>
+      <obj_property name="ObjectShortName">checks[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_s8_alu/errors" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">errors[31:0]</obj_property>
+      <obj_property name="ObjectShortName">errors[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_s8_alu/sum9" type="array" db_ref_id="1">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">sum9[31:0]</obj_property>
+      <obj_property name="ObjectShortName">sum9[31:0]</obj_property>
+      <obj_property name="label">sum9[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_s8_alu/dif9" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">dif9[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dif9[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_s8_alu/exp_r" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">exp_r[7:0]</obj_property>
+      <obj_property name="ObjectShortName">exp_r[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_s8_alu/exp_z" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">exp_z</obj_property>
+      <obj_property name="ObjectShortName">exp_z</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_s8_alu/exp_c" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">exp_c</obj_property>
+      <obj_property name="ObjectShortName">exp_c</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_s8_alu/exp_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">exp_n</obj_property>
+      <obj_property name="ObjectShortName">exp_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_s8_alu/exp_o" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">exp_o</obj_property>
+      <obj_property name="ObjectShortName">exp_o</obj_property>
+   </wvobject>
+</wave_config>
