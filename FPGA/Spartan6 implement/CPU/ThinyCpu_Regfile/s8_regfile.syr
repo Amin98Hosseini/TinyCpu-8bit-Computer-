@@ -1,0 +1,387 @@
+Release 14.7 - xst P.20131013 (nt64)
+Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
+--> Parameter TMPDIR set to xst/projnav.tmp
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.11 secs
+ 
+--> Parameter xsthdpdir set to xst
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.11 secs
+ 
+--> Reading design: s8_regfile.prj
+
+TABLE OF CONTENTS
+  1) Synthesis Options Summary
+  2) HDL Parsing
+  3) HDL Elaboration
+  4) HDL Synthesis
+       4.1) HDL Synthesis Report
+  5) Advanced HDL Synthesis
+       5.1) Advanced HDL Synthesis Report
+  6) Low Level Synthesis
+  7) Partition Report
+  8) Design Summary
+       8.1) Primitive and Black Box Usage
+       8.2) Device utilization summary
+       8.3) Partition Resource Summary
+       8.4) Timing Report
+            8.4.1) Clock Information
+            8.4.2) Asynchronous Control Signals Information
+            8.4.3) Timing Summary
+            8.4.4) Timing Details
+            8.4.5) Cross Clock Domains Report
+
+
+=========================================================================
+*                      Synthesis Options Summary                        *
+=========================================================================
+---- Source Parameters
+Input File Name                    : "s8_regfile.prj"
+Ignore Synthesis Constraint File   : NO
+
+---- Target Parameters
+Output File Name                   : "s8_regfile"
+Output Format                      : NGC
+Target Device                      : xc6slx9-3-tqg144
+
+---- Source Options
+Top Module Name                    : s8_regfile
+Automatic FSM Extraction           : YES
+FSM Encoding Algorithm             : Auto
+Safe Implementation                : No
+FSM Style                          : LUT
+RAM Extraction                     : Yes
+RAM Style                          : Auto
+ROM Extraction                     : Yes
+Shift Register Extraction          : YES
+ROM Style                          : Auto
+Resource Sharing                   : YES
+Asynchronous To Synchronous        : NO
+Shift Register Minimum Size        : 2
+Use DSP Block                      : Auto
+Automatic Register Balancing       : No
+
+---- Target Options
+LUT Combining                      : Auto
+Reduce Control Sets                : Auto
+Add IO Buffers                     : YES
+Global Maximum Fanout              : 100000
+Add Generic Clock Buffer(BUFG)     : 16
+Register Duplication               : YES
+Optimize Instantiated Primitives   : NO
+Use Clock Enable                   : Auto
+Use Synchronous Set                : Auto
+Use Synchronous Reset              : Auto
+Pack IO Registers into IOBs        : Auto
+Equivalent register Removal        : YES
+
+---- General Options
+Optimization Goal                  : Speed
+Optimization Effort                : 1
+Power Reduction                    : NO
+Keep Hierarchy                     : No
+Netlist Hierarchy                  : As_Optimized
+RTL Output                         : Yes
+Global Optimization                : AllClockNets
+Read Cores                         : YES
+Write Timing Constraints           : NO
+Cross Clock Analysis               : NO
+Hierarchy Separator                : /
+Bus Delimiter                      : <>
+Case Specifier                     : Maintain
+Slice Utilization Ratio            : 100
+BRAM Utilization Ratio             : 100
+DSP48 Utilization Ratio            : 100
+Auto BRAM Packing                  : NO
+Slice Utilization Ratio Delta      : 5
+
+=========================================================================
+
+
+=========================================================================
+*                          HDL Parsing                                  *
+=========================================================================
+Analyzing Verilog file "C:\Users\vboxuser\Documents\ThinyCpu\ThinyCpu_Regfile\ThinyRegfile.v" into library work
+Parsing module <s8_regfile>.
+
+=========================================================================
+*                            HDL Elaboration                            *
+=========================================================================
+
+Elaborating module <s8_regfile>.
+
+=========================================================================
+*                           HDL Synthesis                               *
+=========================================================================
+
+Synthesizing Unit <s8_regfile>.
+    Related source file is "C:\Users\vboxuser\Documents\ThinyCpu\ThinyCpu_Regfile\ThinyRegfile.v".
+    Found 64-bit register for signal <n0020[63:0]>.
+    Found 8-bit 8-to-1 multiplexer for signal <rdata_a> created at line 43.
+    Found 8-bit 8-to-1 multiplexer for signal <rdata_b> created at line 44.
+    Summary:
+	inferred  64 D-type flip-flop(s).
+	inferred  10 Multiplexer(s).
+Unit <s8_regfile> synthesized.
+
+=========================================================================
+HDL Synthesis Report
+
+Macro Statistics
+# Registers                                            : 1
+ 64-bit register                                       : 1
+# Multiplexers                                         : 10
+ 8-bit 2-to-1 multiplexer                              : 8
+ 8-bit 8-to-1 multiplexer                              : 2
+
+=========================================================================
+
+=========================================================================
+*                       Advanced HDL Synthesis                          *
+=========================================================================
+
+
+=========================================================================
+Advanced HDL Synthesis Report
+
+Macro Statistics
+# Registers                                            : 64
+ Flip-Flops                                            : 64
+# Multiplexers                                         : 10
+ 8-bit 2-to-1 multiplexer                              : 8
+ 8-bit 8-to-1 multiplexer                              : 2
+
+=========================================================================
+
+=========================================================================
+*                         Low Level Synthesis                           *
+=========================================================================
+
+Optimizing unit <s8_regfile> ...
+
+Mapping all equations...
+Building and optimizing final netlist ...
+Found area constraint ratio of 100 (+ 5) on block s8_regfile, actual ratio is 2.
+
+Final Macro Processing ...
+
+=========================================================================
+Final Register Report
+
+Macro Statistics
+# Registers                                            : 64
+ Flip-Flops                                            : 64
+
+=========================================================================
+
+=========================================================================
+*                           Partition Report                            *
+=========================================================================
+
+Partition Implementation Status
+-------------------------------
+
+  No Partitions were found in this design.
+
+-------------------------------
+
+=========================================================================
+*                            Design Summary                             *
+=========================================================================
+
+Top Level Output File Name         : s8_regfile.ngc
+
+Primitive and Black Box Usage:
+------------------------------
+# BELS                             : 112
+#      LUT5                        : 64
+#      LUT6                        : 32
+#      MUXF7                       : 16
+# FlipFlops/Latches                : 64
+#      FDRE                        : 64
+# Clock Buffers                    : 1
+#      BUFGP                       : 1
+# IO Buffers                       : 35
+#      IBUF                        : 19
+#      OBUF                        : 16
+
+Device utilization summary:
+---------------------------
+
+Selected Device : 6slx9tqg144-3 
+
+
+Slice Logic Utilization: 
+ Number of Slice Registers:              64  out of  11440     0%  
+ Number of Slice LUTs:                   96  out of   5720     1%  
+    Number used as Logic:                96  out of   5720     1%  
+
+Slice Logic Distribution: 
+ Number of LUT Flip Flop pairs used:     96
+   Number with an unused Flip Flop:      32  out of     96    33%  
+   Number with an unused LUT:             0  out of     96     0%  
+   Number of fully used LUT-FF pairs:    64  out of     96    66%  
+   Number of unique control sets:         1
+
+IO Utilization: 
+ Number of IOs:                          36
+ Number of bonded IOBs:                  36  out of    102    35%  
+
+Specific Feature Utilization:
+ Number of BUFG/BUFGCTRLs:                1  out of     16     6%  
+
+---------------------------
+Partition Resource Summary:
+---------------------------
+
+  No Partitions were found in this design.
+
+---------------------------
+
+
+=========================================================================
+Timing Report
+
+NOTE: THESE TIMING NUMBERS ARE ONLY A SYNTHESIS ESTIMATE.
+      FOR ACCURATE TIMING INFORMATION PLEASE REFER TO THE TRACE REPORT
+      GENERATED AFTER PLACE-and-ROUTE.
+
+Clock Information:
+------------------
+-----------------------------------+------------------------+-------+
+Clock Signal                       | Clock buffer(FF name)  | Load  |
+-----------------------------------+------------------------+-------+
+clk                                | BUFGP                  | 64    |
+-----------------------------------+------------------------+-------+
+
+Asynchronous Control Signals Information:
+----------------------------------------
+No asynchronous control signals found in this design
+
+Timing Summary:
+---------------
+Speed Grade: -3
+
+   Minimum period: 1.405ns (Maximum Frequency: 711.617MHz)
+   Minimum input arrival time before clock: 3.414ns
+   Maximum output required time after clock: 4.838ns
+   Maximum combinational path delay: 6.084ns
+
+Timing Details:
+---------------
+All values displayed in nanoseconds (ns)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'clk'
+  Clock period: 1.405ns (frequency: 711.617MHz)
+  Total number of paths / destination ports: 64 / 64
+-------------------------------------------------------------------------
+Delay:               1.405ns (Levels of Logic = 1)
+  Source:            regs_7_0 (FF)
+  Destination:       regs_7_0 (FF)
+  Source Clock:      clk rising
+  Destination Clock: clk rising
+
+  Data Path: regs_7_0 to regs_7_0
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q             3   0.447   0.651  regs_7_0 (regs_7_0)
+     LUT5:I4->O            1   0.205   0.000  Mmux_regs[7][7]_wdata[7]_mux_2_OUT11 (regs[7][7]_wdata[7]_mux_2_OUT<0>)
+     FDRE:D                    0.102          regs_7_0
+    ----------------------------------------
+    Total                      1.405ns (0.754ns logic, 0.651ns route)
+                                       (53.7% logic, 46.3% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'clk'
+  Total number of paths / destination ports: 384 / 192
+-------------------------------------------------------------------------
+Offset:              3.414ns (Levels of Logic = 2)
+  Source:            waddr<2> (PAD)
+  Destination:       regs_7_0 (FF)
+  Destination Clock: clk rising
+
+  Data Path: waddr<2> to regs_7_0
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            64   1.222   1.887  waddr_2_IBUF (waddr_2_IBUF)
+     LUT5:I1->O            1   0.203   0.000  Mmux_regs[0][7]_wdata[7]_mux_9_OUT81 (regs[0][7]_wdata[7]_mux_9_OUT<7>)
+     FDRE:D                    0.102          regs_7_63
+    ----------------------------------------
+    Total                      3.414ns (1.527ns logic, 1.887ns route)
+                                       (44.7% logic, 55.3% route)
+
+=========================================================================
+Timing constraint: Default OFFSET OUT AFTER for Clock 'clk'
+  Total number of paths / destination ports: 128 / 16
+-------------------------------------------------------------------------
+Offset:              4.838ns (Levels of Logic = 3)
+  Source:            regs_7_15 (FF)
+  Destination:       rdata_a<7> (PAD)
+  Source Clock:      clk rising
+
+  Data Path: regs_7_15 to rdata_a<7>
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q             3   0.447   0.898  regs_7_15 (regs_7_15)
+     LUT6:I2->O            1   0.203   0.000  Mmux_rdata_a_37 (Mmux_rdata_a_37)
+     MUXF7:I1->O           1   0.140   0.579  Mmux_rdata_a_2_f7_6 (rdata_a_7_OBUF)
+     OBUF:I->O                 2.571          rdata_a_7_OBUF (rdata_a<7>)
+    ----------------------------------------
+    Total                      4.838ns (3.361ns logic, 1.477ns route)
+                                       (69.5% logic, 30.5% route)
+
+=========================================================================
+Timing constraint: Default path analysis
+  Total number of paths / destination ports: 80 / 16
+-------------------------------------------------------------------------
+Delay:               6.084ns (Levels of Logic = 4)
+  Source:            raddr_a<1> (PAD)
+  Destination:       rdata_a<7> (PAD)
+
+  Data Path: raddr_a<1> to rdata_a<7>
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            16   1.222   1.369  raddr_a_1_IBUF (raddr_a_1_IBUF)
+     LUT6:I0->O            1   0.203   0.000  Mmux_rdata_a_3 (Mmux_rdata_a_3)
+     MUXF7:I1->O           1   0.140   0.579  Mmux_rdata_a_2_f7 (rdata_a_0_OBUF)
+     OBUF:I->O                 2.571          rdata_a_0_OBUF (rdata_a<0>)
+    ----------------------------------------
+    Total                      6.084ns (4.136ns logic, 1.948ns route)
+                                       (68.0% logic, 32.0% route)
+
+=========================================================================
+
+Cross Clock Domains Report:
+--------------------------
+
+Clock to Setup on destination clock clk
+---------------+---------+---------+---------+---------+
+               | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock   |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+---------------+---------+---------+---------+---------+
+clk            |    1.405|         |         |         |
+---------------+---------+---------+---------+---------+
+
+=========================================================================
+
+
+Total REAL time to Xst completion: 3.00 secs
+Total CPU time to Xst completion: 2.91 secs
+ 
+--> 
+
+Total memory usage is 258544 kilobytes
+
+Number of errors   :    0 (   0 filtered)
+Number of warnings :    0 (   0 filtered)
+Number of infos    :    0 (   0 filtered)
+

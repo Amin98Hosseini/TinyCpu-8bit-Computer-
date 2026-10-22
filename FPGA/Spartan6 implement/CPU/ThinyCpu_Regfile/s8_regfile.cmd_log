@@ -1,0 +1,5 @@
+xst -intstyle ise -ifn "C:/Users/vboxuser/Documents/ThinyCpu/ThinyCpu_Regfile/s8_regfile.xst" -ofn "C:/Users/vboxuser/Documents/ThinyCpu/ThinyCpu_Regfile/s8_regfile.syr" 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -i -p xc6slx9-tqg144-3 s8_regfile.ngc s8_regfile.ngd  
+map -intstyle ise -p xc6slx9-tqg144-3 -w -logic_opt off -ol high -t 1 -xt 0 -register_duplication off -r 4 -global_opt off -mt off -ir off -pr off -lc off -power off -o s8_regfile_map.ncd s8_regfile.ngd s8_regfile.pcf 
+par -w -intstyle ise -ol high -mt off s8_regfile_map.ncd s8_regfile.ncd s8_regfile.pcf 
+trce -intstyle ise -v 3 -s 3 -n 3 -fastpaths -xml s8_regfile.twx s8_regfile.ncd -o s8_regfile.twr s8_regfile.pcf 
