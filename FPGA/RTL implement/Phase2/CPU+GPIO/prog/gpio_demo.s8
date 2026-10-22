@@ -1,0 +1,18 @@
+; =============================================================================
+; gpio_demo.s8 - S8 Phase-2 hardware smoke test (spec 6.9.1)
+;
+; Program: drives LED0 (gpio<0>, p105, active high) on and holds it, then
+; spins in place forever. GPIO_DIR resets to 0x0F (all outputs) so no
+; direction setup is needed.
+;
+; Words (normative, spec 6.9.1): 0x1001 0x5000 0x4002
+; This is the image in gpio_demo.hex (one 16-bit hex word per line, which is
+; what $readmemh expects and what s8_program_ram's INIT_FILE parameter reads).
+;
+; No assembler or host toolchain exists yet (Phase 3/7), so this listing is
+; the human-readable reference for the hand-checked hex file.
+; =============================================================================
+
+        LDI  R0, 1          ; 0x1001   R0 = 1
+        OUT  GPIO_OUT, R0   ; 0x5000   LED0 on (DIR = 0x0F out of reset)
+loop:   JMP  loop           ; 0x4002   stay here (self-loop, address 2)

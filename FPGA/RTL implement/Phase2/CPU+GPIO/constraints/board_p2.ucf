@@ -1,0 +1,60 @@
+# =============================================================================
+# S8 Phase 2 constraints - Farad-1 (xc6slx9-2tqg144), Spartan-6, ISE 14.7
+#
+# Source of truth: docs/S8_Technical_Specification_v1.1.md section 15, which is
+# itself verified against the Farad-1 schematic (rev 2016-12-29). Nothing here
+# is guessed: every LOC comes from that table.
+#
+# Phase 2 defines ONLY the pins s8_top actually drives or samples. Declaring a
+# LOC for a net that does not exist produces "unmatched constraint" warnings
+# (UCF 115 / ngdbuild), which is why the later-phase pins are kept as comments
+# below instead of being enabled early. Rule 12 of spec 17 ("every top-level
+# port gets LOC + IOSTANDARD") is therefore satisfied exactly: 7 ports, 7 LOCs.
+#
+# NOTE on syntax: the spec prints the clock group as one line for compactness.
+# This file splits it into the three statements UCF actually requires
+# (TNM_NET on the net, TIMESPEC for the period, LOC/IOSTANDARD for the pin).
+# =============================================================================
+
+# ---- 50.000 MHz oscillator (p85) -------------------------------------------
+NET "clk" TNM_NET = "sys_clk";
+TIMESPEC "TS_sys_clk" = PERIOD "sys_clk" 20.000 ns HIGH 50%;
+NET "clk" LOC = "P85" | IOSTANDARD = "LVCMOS33";
+
+# ---- reset button S2 (p87), active low, RC-debounced on the board ----------
+NET "rst_n" LOC = "P87" | IOSTANDARD = "LVCMOS33";
+
+# ---- MODE strap: DIP0 (p84), board 4.7K pull-up, switch to GND -------------
+# MODE_INVERT = 1 in s8_top: open (default) = run application, closed =
+# programming. No I/O standard guess: bank VCCO is 3.3 V on this board.
+NET "mode" LOC = "P84" | IOSTANDARD = "LVCMOS33";
+
+# ---- 4 user LEDs (p105, p104, p102, p101), active high, 390 ohm -> LED -> GND
+NET "gpio<0>" LOC = "P105" | IOSTANDARD = "LVCMOS33";
+NET "gpio<1>" LOC = "P104" | IOSTANDARD = "LVCMOS33";
+NET "gpio<2>" LOC = "P102" | IOSTANDARD = "LVCMOS33";
+NET "gpio<3>" LOC = "P101" | IOSTANDARD = "LVCMOS33";
+
+# =============================================================================
+# NOT ACTIVE IN PHASE 2 - uncomment together with the matching top-level ports.
+# Keeping them here means the Phase-3/Phase-5 UCF extension starts from the
+# spec table rather than from memory.
+#
+# ---- Phase 3: UART (FT2232H channel B, after the one-time FT_PROG EEPROM
+# ---- change; p83 = FPGA RX, p82 = FPGA TX) --------------------------------
+# NET "uart_rxd" LOC = "P83" | IOSTANDARD = "LVCMOS33";
+# NET "uart_txd" LOC = "P82" | IOSTANDARD = "LVCMOS33";
+# ---- DB9 / MAX232 fallback (swap the two LOCs only) ------------------------
+# NET "uart_rxd" LOC = "P40" | IOSTANDARD = "LVCMOS33";
+# NET "uart_txd" LOC = "P41" | IOSTANDARD = "LVCMOS33";
+#
+# ---- Phase 5: W25Q64BV configuration flash, driven as user I/O after
+# ---- configuration (UG380). WP# and HOLD# have NO board pull-ups, so the
+# ---- design must drive both high (spec 17 rule 11) ------------------------
+# NET "spi_sck"    LOC = "P70" | IOSTANDARD = "LVCMOS33";  # CCLK / FP_PR_CLK
+# NET "spi_cs_n"   LOC = "P38" | IOSTANDARD = "LVCMOS33";  # CSO_B (R6 pull-up)
+# NET "spi_mosi"   LOC = "P64" | IOSTANDARD = "LVCMOS33";  # net MISO0 -> DI
+# NET "spi_miso"   LOC = "P65" | IOSTANDARD = "LVCMOS33";  # net MISO1 <- DO
+# NET "spi_wp_n"   LOC = "P62" | IOSTANDARD = "LVCMOS33";  # drive high
+# NET "spi_hold_n" LOC = "P61" | IOSTANDARD = "LVCMOS33";  # drive high
+# =============================================================================
