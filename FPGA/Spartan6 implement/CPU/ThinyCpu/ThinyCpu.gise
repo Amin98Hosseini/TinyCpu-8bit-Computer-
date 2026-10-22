@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<generated_project xmlns="http://www.xilinx.com/XMLSchema" xmlns:xil_pn="http://www.xilinx.com/XMLSchema">
+
+  <!--                                                          -->
+
+  <!--             For tool use only. Do not edit.              -->
+
+  <!--                                                          -->
+
+  <!-- ProjectNavigator created generated project file.         -->
+
+  <!-- For use in tracking generated file and other information -->
+
+  <!-- allowing preservation of process status.                 -->
+
+  <!--                                                          -->
+
+  <!-- Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved. -->
+
+  <version xmlns="http://www.xilinx.com/XMLSchema">11.1</version>
+
+  <sourceproject xmlns="http://www.xilinx.com/XMLSchema" xil_pn:fileType="FILE_XISE" xil_pn:name="ThinyCpu.xise"/>
+
+  <files xmlns="http://www.xilinx.com/XMLSchema">
+    <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="_ngo"/>
+    <file xil_pn:fileType="FILE_XMSGS" xil_pn:name="_xmsgs/map.xmsgs"/>
+    <file xil_pn:fileType="FILE_XMSGS" xil_pn:name="_xmsgs/ngdbuild.xmsgs"/>
+    <file xil_pn:fileType="FILE_XMSGS" xil_pn:name="_xmsgs/par.xmsgs"/>
+    <file xil_pn:fileType="FILE_XMSGS" xil_pn:name="_xmsgs/trce.xmsgs"/>
+    <file xil_pn:fileType="FILE_XMSGS" xil_pn:name="_xmsgs/xst.xmsgs"/>
+    <file xil_pn:fileType="FILE_LOG" xil_pn:name="fuse.log"/>
+    <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="isim"/>
+    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_CMD" xil_pn:name="isim.cmd"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_NGDBUILD_LOG" xil_pn:name="s8_cpu.bld"/>
+    <file xil_pn:fileType="FILE_CMD_LOG" xil_pn:name="s8_cpu.cmd_log"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_LSO" xil_pn:name="s8_cpu.lso"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_NCD" xil_pn:name="s8_cpu.ncd" xil_pn:subbranch="Par"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_NGC" xil_pn:name="s8_cpu.ngc"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_NGD" xil_pn:name="s8_cpu.ngd"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_NGR" xil_pn:name="s8_cpu.ngr"/>
+    <file xil_pn:fileType="FILE_PAD_MISC" xil_pn:name="s8_cpu.pad"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_PAR_REPORT" xil_pn:name="s8_cpu.par" xil_pn:subbranch="Par"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_PCF" xil_pn:name="s8_cpu.pcf" xil_pn:subbranch="Map"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="s8_cpu.prj"/>
+    <file xil_pn:fileType="FILE_TRCE_MISC" xil_pn:name="s8_cpu.ptwx"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST_STX" xil_pn:name="s8_cpu.stx"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST_REPORT" xil_pn:name="s8_cpu.syr"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_TIMING_TXT_REPORT" xil_pn:name="s8_cpu.twr" xil_pn:subbranch="Par"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_TIMING_XML_REPORT" xil_pn:name="s8_cpu.twx" xil_pn:subbranch="Par"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_UNROUTES" xil_pn:name="s8_cpu.unroutes" xil_pn:subbranch="Par"/>
+    <file xil_pn:fileType="FILE_XPI" xil_pn:name="s8_cpu.xpi"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST" xil_pn:name="s8_cpu.xst"/>
+    <file xil_pn:fileType="FILE_NCD" xil_pn:name="s8_cpu_guide.ncd" xil_pn:origination="imported"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_MAP_REPORT" xil_pn:name="s8_cpu_map.map" xil_pn:subbranch="Map"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_MAP_REPORT" xil_pn:name="s8_cpu_map.mrp" xil_pn:subbranch="Map"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_NCD" xil_pn:name="s8_cpu_map.ncd" xil_pn:subbranch="Map"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_NGM" xil_pn:name="s8_cpu_map.ngm" xil_pn:subbranch="Map"/>
+    <file xil_pn:fileType="FILE_XRPT" xil_pn:name="s8_cpu_map.xrpt"/>
+    <file xil_pn:fileType="FILE_XRPT" xil_pn:name="s8_cpu_ngdbuild.xrpt"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_PAD_EXCEL_REPORT" xil_pn:name="s8_cpu_pad.csv" xil_pn:subbranch="Par"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_PAD_TXT_REPORT" xil_pn:name="s8_cpu_pad.txt" xil_pn:subbranch="Par"/>
+    <file xil_pn:fileType="FILE_XRPT" xil_pn:name="s8_cpu_par.xrpt"/>
+    <file xil_pn:fileType="FILE_HTML" xil_pn:name="s8_cpu_summary.html"/>
+    <file xil_pn:fileType="FILE_FITTER_REPORT" xil_pn:name="s8_cpu_summary.xml"/>
+    <file xil_pn:fileType="FILE_WEBTALK" xil_pn:name="s8_cpu_usage.xml"/>
+    <file xil_pn:fileType="FILE_XRPT" xil_pn:name="s8_cpu_xst.xrpt"/>
+    <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="tb_s8_cpu_programs_beh.prj"/>
+    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_ISIM_EXE" xil_pn:name="tb_s8_cpu_programs_isim_beh.exe"/>
+    <file xil_pn:fileType="FILE_ISIM_MISC" xil_pn:name="tb_s8_cpu_programs_isim_beh.wdb"/>
+    <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="tb_s8_cpu_programs_stx_beh.prj"/>
+    <file xil_pn:fileType="FILE_FITTER_REPORT" xil_pn:name="webtalk_pn.xml"/>
+    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_INI" xil_pn:name="xilinxsim.ini"/>
+    <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="xlnx_auto_0_xdb"/>
+    <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="xst"/>
+  </files>
+
+  <transforms xmlns="http://www.xilinx.com/XMLSchema">
+    <transform xil_pn:end_ts="1792677298" xil_pn:name="TRAN_copyInitialToAbstractSimulation" xil_pn:start_ts="1792677298">
+      <status xil_pn:value="SuccessfullyRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1792677298" xil_pn:in_ck="4535166356053338623" xil_pn:name="TRAN_copyAbstractToPostAbstractSimulation" xil_pn:start_ts="1792677298">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <outfile xil_pn:name="../../../Desktop/Files/s8_alu.v"/>
+      <outfile xil_pn:name="../../../Desktop/Files/s8_bus.v"/>
+      <outfile xil_pn:name="../../../Desktop/Files/s8_cpu.v"/>
+      <outfile xil_pn:name="../../../Desktop/Files/s8_data_ram.v"/>
+      <outfile xil_pn:name="../../../Desktop/Files/s8_program_ram.v"/>
+      <outfile xil_pn:name="../../../Desktop/Files/s8_regfile.v"/>
+      <outfile xil_pn:name="../../../Desktop/Files/tb_s8_cpu_programs.v"/>
+    </transform>
+    <transform xil_pn:end_ts="1792677300" xil_pn:name="TRAN_xawsToSimhdl" xil_pn:prop_ck="1755743939865515006" xil_pn:start_ts="1792677300">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1792677300" xil_pn:name="TRAN_schematicsToHdlSim" xil_pn:prop_ck="-2511591943961828228" xil_pn:start_ts="1792677300">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1792677300" xil_pn:name="TRAN_regenerateCoresSim" xil_pn:prop_ck="-5672775215033294675" xil_pn:start_ts="1792677300">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1792677300" xil_pn:in_ck="4535166356053338623" xil_pn:name="TRAN_copyPostAbstractToPreSimulation" xil_pn:start_ts="1792677300">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <outfile xil_pn:name="../../../Desktop/Files/s8_alu.v"/>
+      <outfile xil_pn:name="../../../Desktop/Files/s8_bus.v"/>
+      <outfile xil_pn:name="../../../Desktop/Files/s8_cpu.v"/>
+      <outfile xil_pn:name="../../../Desktop/Files/s8_data_ram.v"/>
+      <outfile xil_pn:name="../../../Desktop/Files/s8_program_ram.v"/>
+      <outfile xil_pn:name="../../../Desktop/Files/s8_regfile.v"/>
+      <outfile xil_pn:name="../../../Desktop/Files/tb_s8_cpu_programs.v"/>
+    </transform>
+    <transform xil_pn:end_ts="1792677303" xil_pn:in_ck="4535166356053338623" xil_pn:name="TRAN_ISimulateBehavioralModelRunFuse" xil_pn:prop_ck="446129627441018757" xil_pn:start_ts="1792677300">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <outfile xil_pn:name="fuse.log"/>
+      <outfile xil_pn:name="isim"/>
+      <outfile xil_pn:name="tb_s8_cpu_programs_beh.prj"/>
+      <outfile xil_pn:name="tb_s8_cpu_programs_isim_beh.exe"/>
+      <outfile xil_pn:name="xilinxsim.ini"/>
+    </transform>
+    <transform xil_pn:end_ts="1792677304" xil_pn:in_ck="-7922435366174702048" xil_pn:name="TRAN_ISimulateBehavioralModel" xil_pn:prop_ck="5532868662486884306" xil_pn:start_ts="1792677303">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForOutputs"/>
+      <status xil_pn:value="OutputChanged"/>
+      <outfile xil_pn:name="isim.cmd"/>
+      <outfile xil_pn:name="tb_s8_cpu_programs_isim_beh.wdb"/>
+    </transform>
+    <transform xil_pn:end_ts="1792677225" xil_pn:name="TRAN_copyInitialToXSTAbstractSynthesis" xil_pn:start_ts="1792677225">
+      <status xil_pn:value="SuccessfullyRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1792677225" xil_pn:name="TRAN_schematicsToHdl" xil_pn:prop_ck="3292425763077179773" xil_pn:start_ts="1792677225">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1792677225" xil_pn:name="TRAN_regenerateCores" xil_pn:prop_ck="-5672775215033294675" xil_pn:start_ts="1792677225">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1792677225" xil_pn:name="TRAN_SubProjectAbstractToPreProxy" xil_pn:start_ts="1792677225">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1792677225" xil_pn:name="TRAN_xawsTohdl" xil_pn:prop_ck="3195694589839172159" xil_pn:start_ts="1792677225">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1792677225" xil_pn:name="TRAN_SubProjectPreToStructuralProxy" xil_pn:prop_ck="250970745955965653" xil_pn:start_ts="1792677225">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1792677225" xil_pn:name="TRAN_platgen" xil_pn:prop_ck="-7325326467092939209" xil_pn:start_ts="1792677225">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1792677232" xil_pn:in_ck="-4635029415114255362" xil_pn:name="TRANEXT_xstsynthesize_spartan6" xil_pn:prop_ck="-815938444620291514" xil_pn:start_ts="1792677225">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="WarningsGenerated"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForOutputs"/>
+      <status xil_pn:value="OutputChanged"/>
+      <outfile xil_pn:name="_xmsgs/xst.xmsgs"/>
+      <outfile xil_pn:name="s8_cpu.lso"/>
+      <outfile xil_pn:name="s8_cpu.ngc"/>
+      <outfile xil_pn:name="s8_cpu.ngr"/>
+      <outfile xil_pn:name="s8_cpu.prj"/>
+      <outfile xil_pn:name="s8_cpu.stx"/>
+      <outfile xil_pn:name="s8_cpu.syr"/>
+      <outfile xil_pn:name="s8_cpu.xst"/>
+      <outfile xil_pn:name="s8_cpu_xst.xrpt"/>
+      <outfile xil_pn:name="webtalk_pn.xml"/>
+      <outfile xil_pn:name="xst"/>
+    </transform>
+    <transform xil_pn:end_ts="1792677232" xil_pn:name="TRAN_compileBCD2" xil_pn:prop_ck="5069202361944177044" xil_pn:start_ts="1792677232">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1792677235" xil_pn:in_ck="5420260719951000" xil_pn:name="TRANEXT_ngdbuild_FPGA" xil_pn:prop_ck="5997962297084034296" xil_pn:start_ts="1792677232">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <outfile xil_pn:name="_ngo"/>
+      <outfile xil_pn:name="_xmsgs/ngdbuild.xmsgs"/>
+      <outfile xil_pn:name="s8_cpu.bld"/>
+      <outfile xil_pn:name="s8_cpu.ngd"/>
+      <outfile xil_pn:name="s8_cpu_ngdbuild.xrpt"/>
+    </transform>
+    <transform xil_pn:end_ts="1792677246" xil_pn:in_ck="5420260719951001" xil_pn:name="TRANEXT_map_spartan6" xil_pn:prop_ck="6093601622908603872" xil_pn:start_ts="1792677235">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <outfile xil_pn:name="_xmsgs/map.xmsgs"/>
+      <outfile xil_pn:name="s8_cpu.pcf"/>
+      <outfile xil_pn:name="s8_cpu_map.map"/>
+      <outfile xil_pn:name="s8_cpu_map.mrp"/>
+      <outfile xil_pn:name="s8_cpu_map.ncd"/>
+      <outfile xil_pn:name="s8_cpu_map.ngm"/>
+      <outfile xil_pn:name="s8_cpu_map.xrpt"/>
+      <outfile xil_pn:name="s8_cpu_summary.xml"/>
+      <outfile xil_pn:name="s8_cpu_usage.xml"/>
+    </transform>
+    <transform xil_pn:end_ts="1792677255" xil_pn:in_ck="8534077700880527410" xil_pn:name="TRANEXT_par_spartan6" xil_pn:prop_ck="93661965788626211" xil_pn:start_ts="1792677246">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <outfile xil_pn:name="_xmsgs/par.xmsgs"/>
+      <outfile xil_pn:name="s8_cpu.ncd"/>
+      <outfile xil_pn:name="s8_cpu.pad"/>
+      <outfile xil_pn:name="s8_cpu.par"/>
+      <outfile xil_pn:name="s8_cpu.ptwx"/>
+      <outfile xil_pn:name="s8_cpu.unroutes"/>
+      <outfile xil_pn:name="s8_cpu.xpi"/>
+      <outfile xil_pn:name="s8_cpu_pad.csv"/>
+      <outfile xil_pn:name="s8_cpu_pad.txt"/>
+      <outfile xil_pn:name="s8_cpu_par.xrpt"/>
+    </transform>
+    <transform xil_pn:end_ts="1792677255" xil_pn:in_ck="5420260719950869" xil_pn:name="TRAN_postRouteTrce" xil_pn:prop_ck="445577401284416185" xil_pn:start_ts="1792677251">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <outfile xil_pn:name="_xmsgs/trce.xmsgs"/>
+      <outfile xil_pn:name="s8_cpu.twr"/>
+      <outfile xil_pn:name="s8_cpu.twx"/>
+    </transform>
+  </transforms>
+
+</generated_project>

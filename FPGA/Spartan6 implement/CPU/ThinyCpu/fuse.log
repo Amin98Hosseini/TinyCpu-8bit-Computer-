@@ -1,0 +1,30 @@
+Running: C:\Xilinx\14.7\ISE_DS\ISE\bin\nt64\unwrapped\fuse.exe -intstyle ise -incremental -lib unisims_ver -lib unimacro_ver -lib xilinxcorelib_ver -lib secureip -o C:/Users/vboxuser/Documents/ThinyCpu/ThinyCpu/tb_s8_cpu_programs_isim_beh.exe -prj C:/Users/vboxuser/Documents/ThinyCpu/ThinyCpu/tb_s8_cpu_programs_beh.prj work.tb_s8_cpu_programs work.glbl 
+ISim P.20131013 (signature 0x7708f090)
+Number of CPUs detected in this system: 4
+Turning on mult-threading, number of parallel sub-compilation jobs: 8 
+Determining compilation order of HDL files
+Analyzing Verilog file "C:/Users/vboxuser/Documents/ThinyCpu/ThinyCpu/../../../Desktop/Files/s8_regfile.v" into library work
+Analyzing Verilog file "C:/Users/vboxuser/Documents/ThinyCpu/ThinyCpu/../../../Desktop/Files/s8_alu.v" into library work
+Analyzing Verilog file "C:/Users/vboxuser/Documents/ThinyCpu/ThinyCpu/../../../Desktop/Files/s8_program_ram.v" into library work
+Analyzing Verilog file "C:/Users/vboxuser/Documents/ThinyCpu/ThinyCpu/../../../Desktop/Files/s8_data_ram.v" into library work
+Analyzing Verilog file "C:/Users/vboxuser/Documents/ThinyCpu/ThinyCpu/../../../Desktop/Files/s8_cpu.v" into library work
+Analyzing Verilog file "C:/Users/vboxuser/Documents/ThinyCpu/ThinyCpu/../../../Desktop/Files/s8_bus.v" into library work
+Analyzing Verilog file "C:/Users/vboxuser/Documents/ThinyCpu/ThinyCpu/../../../Desktop/Files/tb_s8_cpu_programs.v" into library work
+Analyzing Verilog file "C:/Xilinx/14.7/ISE_DS/ISE//verilog/src/glbl.v" into library work
+Starting static elaboration
+Completed static elaboration
+Compiling module s8_regfile
+Compiling module s8_alu
+Compiling module s8_cpu
+Compiling module s8_program_ram
+Compiling module s8_data_ram
+Compiling module s8_bus
+Compiling module tb_mmio_stub
+Compiling module tb_s8_cpu_programs
+Compiling module glbl
+Time Resolution for simulation is 1ps.
+Waiting for 3 sub-compilation(s) to finish...
+Compiled 9 Verilog Units
+Built simulation executable C:/Users/vboxuser/Documents/ThinyCpu/ThinyCpu/tb_s8_cpu_programs_isim_beh.exe
+Fuse Memory Usage: 30300 KB
+Fuse CPU Usage: 312 ms

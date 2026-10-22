@@ -1,0 +1,3 @@
+verilog work "../../../Desktop/Files/s8_regfile.v"
+verilog work "../../../Desktop/Files/s8_alu.v"
+verilog work "../../../Desktop/Files/s8_cpu.v"

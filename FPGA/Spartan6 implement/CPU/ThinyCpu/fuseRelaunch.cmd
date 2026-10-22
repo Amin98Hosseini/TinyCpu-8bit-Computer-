@@ -1,0 +1,1 @@
+-intstyle "ise" -incremental -lib "unisims_ver" -lib "unimacro_ver" -lib "xilinxcorelib_ver" -lib "secureip" -o "C:/Users/vboxuser/Documents/ThinyCpu/ThinyCpu/tb_s8_cpu_programs_isim_beh.exe" -prj "C:/Users/vboxuser/Documents/ThinyCpu/ThinyCpu/tb_s8_cpu_programs_beh.prj" "work.tb_s8_cpu_programs" "work.glbl" 
